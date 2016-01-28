@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">TCC</string>
+    <string name="action_settings">Settings</string>
+    <string name="TitleInicialStr">Mobile Systematic Rev</string>
+    <string name="LoginBttInicialStr">Login</string>
+    <string name="RegisterBttIncialStr">Register</string>
+    <string name="title_activity_list_sr">ListSRActivity</string>
+    <string name="TitleListStr">Systematic Review</string>
+    <string name="title_activity_create_sr">CreateSRActivity</string>
+    <string name="TitleCreateStr">Create Systematic Review</string>
+    <string name="title_activity_register_r">RegisterRActivity</string>
+    <string name="TitleRegisterStr">Register</string>
+    <string name="InclusionCriteriaBttStr">Add Inclusion Criteria</string>
+    <string name="ExclusionCriteriaBttStr">Add Exclusion Criteria</string>
+    <string name="CriteriaHintStr">Criteria:</string>
+    <string name="ReviewersHintStr">New participating reviewer:</string>
+    <string name="ReviewersBttStr">Invite</string>
+    <string name="bibHintStr">Add URL to .bib:</string>
+    <string name="TitleCreateHintStr">Title:</string>
+    <string name="ObjectiveCreateHintStr">Objective:</string>
+    <string name="QuestionsCreateHintStr">Research questions:</string>
+    <string name="NameHintStr">Name:</string>
+    <string name="EmailHintStr">E-mail:</string>
+    <string name="PasswordHintStr">Password:</string>
+    <string name="CPasswordHintStr">Confirm password:</string>
+    <string name="UniAffiliationHintStr">University affiliation:</string>
+    <string name="CountryHintStr">Country:</string>
+    <string name="title_activity_read_sr">ReadSRActivity</string>
+    <string name="LoginBttReadStr">Login</string>
+    <string name="token">37163664732-2e24qfubnoi9tg33vkm96b6ftujh573o.apps.googleusercontent.com</string>
+</resources>

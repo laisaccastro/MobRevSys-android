@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.laisa.tcc" >
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".InicialActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ListSRActivity"
+            android:label="@string/title_activity_list_sr"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CreateSRActivity"
+            android:label="@string/title_activity_create_sr"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RegisterRActivity"
+            android:label="@string/title_activity_register_r"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_read_sr"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ReadSRActivity"
+            android:label="@string/title_activity_read_sr"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+    </application>
+
+</manifest>
