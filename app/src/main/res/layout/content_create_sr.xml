@@ -48,10 +48,22 @@
         android:layout_below="@+id/ObjectiveSR"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/ObjectiveSR"
-        android:layout_alignEnd="@+id/ObjectiveSR"
         android:hint="@string/QuestionsCreateHintStr"
+        android:layout_toLeftOf="@+id/BttQuestion"
+        android:layout_toStartOf="@+id/BttQuestion"
         android:textSize="15sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/BttQuestion"
+        android:text="@string/QuestionBttStr"
+        android:textSize="10dp"
+        android:layout_alignBottom="@+id/QuestionsSR"
+        android:layout_alignRight="@+id/CriteriaSR"
+        android:layout_alignEnd="@+id/CriteriaSR"
+        android:layout_below="@+id/ObjectiveSR" />
+
 
     <EditText
         android:layout_width="wrap_content"
@@ -60,8 +72,8 @@
         android:layout_below="@+id/QuestionsSR"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/QuestionsSR"
-        android:layout_alignEnd="@+id/QuestionsSR"
+        android:layout_alignRight="@+id/TitleSR"
+        android:layout_alignEnd="@+id/TitleSR"
         android:textSize="15sp"
         android:hint="@string/CriteriaHintStr" />
 
@@ -143,8 +155,8 @@
         android:layout_below="@+id/ReviewersSR"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/QuestionsSR"
-        android:layout_alignEnd="@+id/QuestionsSR"
+        android:layout_alignRight="@+id/TitleSR"
+        android:layout_alignEnd="@+id/TitleSR"
         android:textSize="15sp"
         android:hint="@string/bibHintStr" />
 

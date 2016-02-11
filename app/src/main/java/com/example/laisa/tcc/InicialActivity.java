@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class InicialActivity extends AppCompatActivity {
 
-
+    Button btt1,btt2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +21,30 @@ public class InicialActivity extends AppCompatActivity {
         Intent i = new Intent(InicialActivity.this,LoginActivity.class);
         startActivity(i);
 
+        btt1=(Button) findViewById(R.id.BttLoginInicial);
+        btt1.setOnClickListener(loginListener);
+
+        btt2=(Button) findViewById(R.id.BttRegisterInicial);
+        btt2.setOnClickListener(registerListener);
+
     }
+
+
+    public View.OnClickListener loginListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(InicialActivity.this,LoginActivity.class);
+            startActivity(i);
+        }
+    };
+
+    public View.OnClickListener registerListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent in = new Intent(InicialActivity.this,RegisterRActivity.class);
+            startActivity(in);
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

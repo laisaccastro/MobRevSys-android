@@ -28,4 +28,6 @@
     <string name="title_activity_read_sr">ReadSRActivity</string>
     <string name="LoginBttReadStr">Login</string>
     <string name="token">37163664732-2e24qfubnoi9tg33vkm96b6ftujh573o.apps.googleusercontent.com</string>
+    <string name="reviewerAddMessage">What is the role of the reviewer?</string>
+    <string name="QuestionBttStr">Add</string>
 </resources>

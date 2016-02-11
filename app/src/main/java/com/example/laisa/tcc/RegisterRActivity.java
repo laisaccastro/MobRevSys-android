@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.laisa.entidades.Reviewer;
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,7 +33,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class RegisterRActivity extends AppCompatActivity {
 
-    private static final String TAG = "SignInActivity";
+    private static final String TAG = "RegisterActivity";
+    private static final int REGISTER_RESULT = 9002;
     EditText edtxt1,edtxt2,edtxt3,edtxt4,edtxt5,edtxt6;
 
     @Override
@@ -103,13 +107,15 @@ public class RegisterRActivity extends AppCompatActivity {
                     OutputStream os = conn.getOutputStream();
                     BufferedWriter writer = new BufferedWriter(
                             new OutputStreamWriter(os, "UTF-8"));
-                    JSONObject reviewer = new JSONObject();
-                    reviewer.put("name", name);
-                    reviewer.put("email", email);
-                    reviewer.put("password", password);
-                    reviewer.put("uniaffiation", uniaffiation);
-                    reviewer.put("country",country);
-                    writer.write(reviewer.toString());
+                    Reviewer reviewer = new Reviewer();
+                    reviewer.setName(name);
+                    reviewer.setEmail(email);
+                    reviewer.setPassword(password);
+                    reviewer.setAffiliatedUniversity(uniaffiation);
+                    reviewer.setCountry(country);
+                    Gson gson = new Gson();
+                    String reviewerJson = gson.toJson(reviewer);
+                    writer.write(reviewerJson);
                     writer.flush();
                     writer.close();
                     os.close();
@@ -117,8 +123,6 @@ public class RegisterRActivity extends AppCompatActivity {
                     Log.i(TAG, "Signed in as: " + responseCode);
                 } catch (IOException e) {
                     Log.e(TAG, "Error sending ID token to backend.", e);
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();

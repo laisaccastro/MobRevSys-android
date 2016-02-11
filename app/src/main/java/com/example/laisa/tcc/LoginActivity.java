@@ -11,12 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.laisa.entidades.Reviewer;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -128,8 +130,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
-                writer.write("email=" + URLEncoder.encode(email, "UTF-8"));
-                writer.write("&password=" + URLEncoder.encode(password, "UTF-8"));
+                Reviewer reviewer = new Reviewer();
+                reviewer.setEmail(email);
+                reviewer.setPassword(password);
+                Gson gson = new Gson();
+                String reviewerJson = gson.toJson(reviewer);
+                writer.write(reviewerJson);
                 writer.flush();
                 writer.close();
                 os.close();
