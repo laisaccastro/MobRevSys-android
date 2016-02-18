@@ -1,5 +1,7 @@
 package com.example.laisa.entidades;
 
+import com.example.laisa.Type.PaperDivisionType;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -13,6 +15,8 @@ public class SystematicReview {
     private List<Criteria> criteria;
     private List<ReviewerRole> participatingReviewers;
     private BibFile bib;
+    private PaperDivisionType divisionType;
+
 
     public long getId() {
         return Id;
@@ -78,6 +82,13 @@ public class SystematicReview {
         this.bib = bib;
     }
 
+    public PaperDivisionType getDivisionType() {
+        return divisionType;
+    }
+
+    public void setDivisionType(PaperDivisionType divisionType) {
+        this.divisionType = divisionType;
+    }
 
 
     @Override
@@ -114,6 +125,9 @@ public class SystematicReview {
             return false;
         }
         if (!Objects.equals(this.bib, other.bib)) {
+            return false;
+        }
+        if (!Objects.equals(this.divisionType, other.divisionType)){
             return false;
         }
         return true;

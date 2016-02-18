@@ -30,7 +30,7 @@
         android:textSize="20dp"
         android:layout_below="@+id/TitleInicial"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="40dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -38,7 +38,16 @@
         android:text="@string/RegisterBttIncialStr"
         android:id="@+id/BttRegisterInicial"
         android:textSize="20dp"
+        android:layout_below="@+id/BttLoginInicial"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:singleLine="false" />
+        android:layout_marginTop="10dp"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/BttRegisterInicial"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
 </RelativeLayout>
