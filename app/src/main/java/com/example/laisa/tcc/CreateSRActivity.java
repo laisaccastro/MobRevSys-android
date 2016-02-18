@@ -2,6 +2,7 @@ package com.example.laisa.tcc;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,8 +16,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.laisa.Type.PaperDivisionType;
 import com.example.laisa.Type.RoleType;
 import com.example.laisa.entidades.BibFile;
+import com.example.laisa.entidades.Reviewer;
 import com.example.laisa.entidades.ReviewerRole;
 import com.example.laisa.entidades.SystematicReview;
 import com.google.gson.Gson;
@@ -46,9 +49,10 @@ public class CreateSRActivity extends AppCompatActivity {
     List <ReviewerRole> reviewerRoles;
     ListView inclusionList,exclusionList;
     ArrayAdapter inclusionAdapter,exclusionAdapter;
-    final CharSequence[] roles = {"Selection","Selection Review","VTM Selection Review"};
-    ArrayList<RoleType> selectedRoles;
+    final CharSequence[] roles = {"SELECTION","REVIEW","VTM_REVIEW"};
+    List<RoleType> selectedRoles;
     private static final String TAG = "CreateActivity";
+    private PaperDivisionType divisionType;
 
 
     @Override
@@ -128,11 +132,11 @@ public class CreateSRActivity extends AppCompatActivity {
     private View.OnClickListener inviteListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            final String reviewer = edtxt5.getText().toString();
+            final String reviewerEmail = edtxt5.getText().toString();
             boolean exists=false;
 
             for(ReviewerRole r:reviewerRoles){
-                if(r.getReviewer().getEmail().equals(reviewer)){
+                if(r.getReviewer().getEmail().equals(reviewerEmail)){
                     exists=true;
                     break;
                 }
@@ -142,6 +146,10 @@ public class CreateSRActivity extends AppCompatActivity {
 
             }else{
                 selectedRoles = new ArrayList();
+                final ReviewerRole reviewerRole = new ReviewerRole();
+                Reviewer r = new Reviewer();
+                r.setEmail(reviewerEmail);
+                reviewerRole.setReviewer(r);
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateSRActivity.this);
                 builder.setMessage(R.string.reviewerAddMessage);
                 builder.setMultiChoiceItems(roles, null, new DialogInterface.OnMultiChoiceClickListener() {
@@ -149,12 +157,31 @@ public class CreateSRActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                         if(isChecked)
                         {
-                            selectedRoles.add(roles[which].toString());
-
+                            switch (roles[which].toString()){
+                                case "REVIEW":
+                                    selectedRoles.add(RoleType.REVIEW);
+                                    break;
+                                case "SELECTION":
+                                    selectedRoles.add(RoleType.SELECTION);
+                                    break;
+                                case "VTW_REVIEW":
+                                    selectedRoles.add(RoleType.VTM_REVIEW);
+                                    break;
+                            }
                         }
-                        else if (selectedRoles.contains(roles[which].toString()))
+                        else
                         {
-                            selectedRoles.remove(roles[which].toString());
+                            switch (roles[which].toString()){
+                                case "REVIEW":
+                                    selectedRoles.remove(RoleType.REVIEW);
+                                    break;
+                                case "SELECTION":
+                                    selectedRoles.remove(RoleType.SELECTION);
+                                    break;
+                                case "VTW_REVIEW":
+                                    selectedRoles.remove(RoleType.VTM_REVIEW);
+                                    break;
+                            }
                         }
                     }
 
@@ -168,18 +195,21 @@ public class CreateSRActivity extends AppCompatActivity {
                                     .setPositiveButton("Divide studies", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            selectedRoles.add("Divide studies");
+                                            divisionType = PaperDivisionType.SPLIT;
+                                            reviewerRole.setRoles(selectedRoles);
+                                            reviewerRoles.add(reviewerRole);
                                         }
                                     })
                                     .setNegativeButton("All studies", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            selectedRoles.add("All studies");
+                                            divisionType = PaperDivisionType.ALL;
+                                            reviewerRole.setRoles(selectedRoles);
+                                            reviewerRoles.add(reviewerRole);
                                         }
                                     }).create();
                             builderSelection.show();
                         }
-                        reviewers.put(reviewer,selectedRoles);
 
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -251,7 +281,10 @@ public class CreateSRActivity extends AppCompatActivity {
             conn.setConnectTimeout(15000);
             conn.setRequestProperty("Content-Type",
                     "application/json");
+            SharedPreferences pref = getSharedPreferences("mobrevsys",MODE_PRIVATE);
+            conn.setRequestProperty("Authorization",pref.getString("jwt",""));
             conn.setRequestMethod("POST");
+
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
@@ -266,6 +299,8 @@ public class CreateSRActivity extends AppCompatActivity {
                 srev.setObjective(objective);
                 srev.setResearchQuestions(questions);
                 srev.setBib(bibFile);
+                srev.setParticipatingReviewers(reviewerRoles);
+                srev.setDivisionType(divisionType);
                 Gson gson = new Gson();
                 String srevJson = gson.toJson(srev);
                 writer.write(srevJson);

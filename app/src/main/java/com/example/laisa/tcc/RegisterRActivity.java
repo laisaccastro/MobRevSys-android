@@ -46,6 +46,14 @@ public class RegisterRActivity extends AppCompatActivity {
         if(toolbar!=null){
             getSupportActionBar().setTitle("Register Reviewer");
         }
+        String email = getIntent().getStringExtra("email");
+        String name = getIntent().getStringExtra("name");
+        edtxt1 = (EditText) findViewById(R.id.NameRegister);
+        edtxt2 = (EditText) findViewById(R.id.EmailRegister);
+        if(email!=null&&name!=null){
+            edtxt1.setText(name);
+            edtxt2.setText(email);
+        }
 
     }
 
@@ -73,10 +81,10 @@ public class RegisterRActivity extends AppCompatActivity {
     }
 
     private void register() {
-        edtxt1 = (EditText) findViewById(R.id.NameRegister);
+
         String name = edtxt1.getText().toString();
 
-        edtxt2 = (EditText) findViewById(R.id.EmailRegister);
+
         String email = edtxt2.getText().toString();
 
         edtxt3 = (EditText) findViewById(R.id.PasswordRegister);
