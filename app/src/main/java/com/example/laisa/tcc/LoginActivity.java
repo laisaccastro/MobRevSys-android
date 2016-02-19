@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.laisa.JWTUtil.JwtToken;
 import com.example.laisa.entidades.Reviewer;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -132,8 +133,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 int responseCode = conn.getResponseCode();
                 switch (responseCode){
                     case HttpsURLConnection.HTTP_OK:
-                        storeJWT(scanner.next());
-                        Intent i = new Intent(LoginActivity.this,ReadSRActivity.class);
+                        JwtToken.storeJWT(scanner.next(), LoginActivity.this);
+                        Intent i = new Intent(LoginActivity.this,ListSRActivity.class);
                         startActivity(i);
                         break;
                     case HttpsURLConnection.HTTP_UNAUTHORIZED:
@@ -160,12 +161,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
-    public void storeJWT(String jwt){
-        SharedPreferences preferences = getSharedPreferences("mobrevsys",MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("jwt",jwt);
 
-    }
 
 
 }
