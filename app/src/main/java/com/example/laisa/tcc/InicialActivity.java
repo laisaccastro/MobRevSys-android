@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.laisa.JWTUtil.JwtToken;
 import com.example.laisa.entidades.Reviewer;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -174,9 +175,7 @@ public class InicialActivity extends AppCompatActivity implements GoogleApiClien
                             break;
                         case HttpURLConnection.HTTP_OK:
                             String jwt = scan.next();
-                            SharedPreferences preferences = getSharedPreferences("mobrevsys",MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("jwt",jwt);
+                            JwtToken.storeJWT(jwt,InicialActivity.this);
                             break;
                     }
                     Log.i(TAG, "Signed in as: " + responseCode);

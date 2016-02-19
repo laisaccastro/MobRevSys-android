@@ -1,5 +1,6 @@
 package com.example.laisa.tcc;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.laisa.JWTUtil.JwtToken;
 import com.example.laisa.entidades.Reviewer;
 import com.google.gson.Gson;
 
@@ -22,12 +24,14 @@ import org.json.JSONObject;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -127,7 +131,23 @@ public class RegisterRActivity extends AppCompatActivity {
                     writer.flush();
                     writer.close();
                     os.close();
+                    InputStream is = conn.getInputStream();
+                    Scanner scanner = new Scanner(is);
                     int responseCode = conn.getResponseCode();
+                    switch (responseCode) {
+                        case HttpsURLConnection.HTTP_OK:
+                            JwtToken.storeJWT(scanner.next(),RegisterRActivity.this);
+                            Intent i = new Intent(RegisterRActivity.this, ListSRActivity.class);
+                            startActivity(i);
+                            break;
+                        case HttpsURLConnection.HTTP_NOT_ACCEPTABLE:
+                            Toast.makeText(RegisterRActivity.this, "an user with the given email already exists.", Toast.LENGTH_SHORT).show();
+                            edtxt2.setText("");
+                            edtxt3.setText("");
+                            edtxt4.setText("");
+                            break;
+                    }
+
                     Log.i(TAG, "Signed in as: " + responseCode);
                 } catch (IOException e) {
                     Log.e(TAG, "Error sending ID token to backend.", e);
