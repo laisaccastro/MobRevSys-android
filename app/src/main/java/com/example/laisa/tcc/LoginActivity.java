@@ -2,6 +2,7 @@ package com.example.laisa.tcc;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.laisa.entidades.Reviewer;
 import com.google.android.gms.auth.api.Auth;
@@ -22,6 +24,7 @@ import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
@@ -30,6 +33,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -123,7 +127,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 writer.flush();
                 writer.close();
                 os.close();
+                InputStream is = conn.getInputStream();
+                Scanner scanner = new Scanner(is);
                 int responseCode = conn.getResponseCode();
+                switch (responseCode){
+                    case HttpsURLConnection.HTTP_OK:
+                        storeJWT(scanner.next());
+                        Intent i = new Intent(LoginActivity.this,ReadSRActivity.class);
+                        startActivity(i);
+                        break;
+                    case HttpsURLConnection.HTTP_UNAUTHORIZED:
+                        Toast.makeText(LoginActivity.this,"The given password does not match. Please try again.",Toast.LENGTH_SHORT).show();
+                        edtxt2.setText("");
+                        break;
+                    case HttpsURLConnection.HTTP_NOT_FOUND:
+                        Toast.makeText(LoginActivity.this,"There is no user with the given email.",Toast.LENGTH_SHORT).show();
+                        edtxt1.setText("");
+                        edtxt2.setText("");
+                        break;
+                }
                 Log.i(TAG, "Signed in as: " + responseCode);
             } catch (IOException e) {
                 Log.e(TAG, "Error sending ID token to backend.", e);
@@ -137,5 +159,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
     }
+
+    public void storeJWT(String jwt){
+        SharedPreferences preferences = getSharedPreferences("mobrevsys",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("jwt",jwt);
+
+    }
+
 
 }
