@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.laisa.JWTUtil.JwtToken;
+import com.example.laisa.Util;
 import com.example.laisa.entidades.Reviewer;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -134,6 +135,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 switch (responseCode){
                     case HttpsURLConnection.HTTP_OK:
                         JwtToken.storeJWT(scanner.next(), LoginActivity.this);
+                        Util.saveEmail(email,LoginActivity.this);
                         Intent i = new Intent(LoginActivity.this,ListSRActivity.class);
                         startActivity(i);
                         break;

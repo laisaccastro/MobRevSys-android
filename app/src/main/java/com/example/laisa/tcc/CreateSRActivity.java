@@ -275,7 +275,7 @@ public class CreateSRActivity extends AppCompatActivity {
         String bib = edtxt6.getText().toString();
 
         try {
-            URL url = new URL("http://localhost:8080/api/create");
+            URL url = new URL("http://localhost:8080/api/systematicreview");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(15000);
