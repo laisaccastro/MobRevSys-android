@@ -49,8 +49,7 @@ public class InicialActivity extends AppCompatActivity implements GoogleApiClien
         setContentView(R.layout.activity_inicial);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Intent i = new Intent(InicialActivity.this,LoginActivity.class);
-        startActivity(i);
+
 
         btt1=(Button) findViewById(R.id.BttLoginInicial);
         btt1.setOnClickListener(loginListener);

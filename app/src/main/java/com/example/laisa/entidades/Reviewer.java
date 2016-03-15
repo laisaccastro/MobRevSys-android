@@ -5,7 +5,6 @@ import java.util.Objects;
 
 public class Reviewer {
 
-    private long Id;
     private String name;
     private String email;
     private String password;
@@ -13,13 +12,6 @@ public class Reviewer {
     private String country;
     private List<SystematicReview> reviews;
 
-    public long getId() {
-        return Id;
-    }
-
-    public void setId(long Id) {
-        this.Id = Id;
-    }
 
     public String getName() {
         return name;
@@ -81,9 +73,6 @@ public class Reviewer {
             return false;
         }
         final Reviewer other = (Reviewer) obj;
-        if (this.Id != other.Id) {
-            return false;
-        }
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }

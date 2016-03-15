@@ -2,6 +2,7 @@ package com.example.laisa.tcc;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
@@ -27,11 +28,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -77,98 +84,134 @@ public class RegisterRActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_register) {
-            register();
+            String name = edtxt1.getText().toString();
+
+
+            String email = edtxt2.getText().toString();
+
+            edtxt3 = (EditText) findViewById(R.id.PasswordRegister);
+            String password = edtxt3.getText().toString();
+
+            edtxt4 = (EditText) findViewById(R.id.CPasswordRegister);
+            String cpassword = edtxt4.getText().toString();
+
+            edtxt5 = (EditText) findViewById(R.id.UniAffiation);
+            String uniaffiliation = edtxt5.getText().toString();
+
+            edtxt6 = (EditText) findViewById(R.id.CountryRegister);
+            String country = edtxt6.getText().toString();
+            Map<String,String> map = new HashMap<>();
+            map.put("name",name);
+            map.put("email",email);
+            map.put("password",password);
+            map.put("cpassword",cpassword);
+            map.put("uniaffiliation",uniaffiliation);
+            map.put("country",country);
+            LoginTask task = new LoginTask();
+            task.execute(map);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void register() {
+    private class LoginTask extends AsyncTask<Map<String,String>,Void,String>{
 
-        String name = edtxt1.getText().toString();
-
-
-        String email = edtxt2.getText().toString();
-
-        edtxt3 = (EditText) findViewById(R.id.PasswordRegister);
-        String password = edtxt3.getText().toString();
-
-        edtxt4 = (EditText) findViewById(R.id.CPasswordRegister);
-        String cpassword = edtxt4.getText().toString();
-
-        edtxt5 = (EditText) findViewById(R.id.UniAffiation);
-        String uniaffiation = edtxt5.getText().toString();
-
-        edtxt6 = (EditText) findViewById(R.id.CountryRegister);
-        String country = edtxt6.getText().toString();
-
-        if (password.equals(cpassword)) {
-            try {
-                URL url = new URL("http://localhost:8080/api/register");
-                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestProperty("Content-Type",
-                        "application/json");
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
+        private int responseCode =-1;
+        @Override
+        protected String doInBackground(Map<String,String>... params) {
+            Map<String,String> map = params[0];
+            String name = map.get("name");
+            String email = map.get("email");
+            String password = map.get("password");
+            String cpassword = map.get("cpassword");
+            String uniaffiation = map.get("uniaffiliation");
+            String country = map.get("country");
+            if (password.equals(cpassword)) {
                 try {
-                    OutputStream os = conn.getOutputStream();
-                    BufferedWriter writer = new BufferedWriter(
-                            new OutputStreamWriter(os, "UTF-8"));
-                    Reviewer reviewer = new Reviewer();
-                    reviewer.setName(name);
-                    reviewer.setEmail(email);
-                    reviewer.setPassword(password);
-                    reviewer.setAffiliatedUniversity(uniaffiation);
-                    reviewer.setCountry(country);
-                    Gson gson = new Gson();
-                    String reviewerJson = gson.toJson(reviewer);
-                    writer.write(reviewerJson);
-                    writer.flush();
-                    writer.close();
-                    os.close();
-                    InputStream is = conn.getInputStream();
-                    Scanner scanner = new Scanner(is);
-                    int responseCode = conn.getResponseCode();
-                    switch (responseCode) {
-                        case HttpsURLConnection.HTTP_OK:
-                            JwtToken.storeJWT(scanner.next(),RegisterRActivity.this);
-                            Intent i = new Intent(RegisterRActivity.this, ListSRActivity.class);
-                            startActivity(i);
-                            break;
-                        case HttpsURLConnection.HTTP_NOT_ACCEPTABLE:
-                            Toast.makeText(RegisterRActivity.this, "an user with the given email already exists.", Toast.LENGTH_SHORT).show();
-                            edtxt2.setText("");
-                            edtxt3.setText("");
-                            edtxt4.setText("");
-                            break;
+                    URL url = new URL("http://localhost:8080/api/register");
+                    Proxy proxy = new Proxy(Proxy.Type.HTTP,new InetSocketAddress("10.0.2.2",8090));
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection(proxy);
+                    conn.setReadTimeout(10000);
+                    conn.setConnectTimeout(15000);
+                    conn.setRequestProperty("Content-Type",
+                            "application/json");
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+
+                    try {
+                        OutputStream os = conn.getOutputStream();
+                        BufferedWriter writer = new BufferedWriter(
+                                new OutputStreamWriter(os, "UTF-8"));
+                        Reviewer reviewer = new Reviewer();
+                        reviewer.setName(name);
+                        reviewer.setEmail(email);
+                        reviewer.setPassword(password);
+                        reviewer.setAffiliatedUniversity(uniaffiation);
+                        reviewer.setCountry(country);
+                        Gson gson = new Gson();
+                        String reviewerJson = gson.toJson(reviewer);
+                        writer.write(reviewerJson);
+                        writer.flush();
+                        writer.close();
+                        os.close();
+                        Scanner scanner = null;
+                        responseCode = conn.getResponseCode();
+                        Log.i(TAG, "Response code: " + responseCode);
+                        if(responseCode<400){
+                            InputStream is = conn.getInputStream();
+                            scanner = new Scanner(is);
+
+                        }else{
+                            InputStream is = conn.getErrorStream();
+                            scanner = new Scanner(is);
+                        }
+                        return scanner.next();
+
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error sending ID token to backend.", e);
                     }
-
-                    Log.i(TAG, "Signed in as: " + responseCode);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (ProtocolException e) {
+                    e.printStackTrace();
                 } catch (IOException e) {
-                    Log.e(TAG, "Error sending ID token to backend.", e);
+                    e.printStackTrace();
                 }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
+            }
+            return null;
         }
-        else{
+
+        @Override
+        protected void onPostExecute(String jwt) {
+            switch (responseCode) {
+                case HttpsURLConnection.HTTP_OK:
+                    JwtToken.storeJWT(jwt,RegisterRActivity.this);
+                    Intent i = new Intent(RegisterRActivity.this, ListSRActivity.class);
+                    Log.d(TAG,jwt);
+                    startActivity(i);
+
+                    return;
+                case HttpsURLConnection.HTTP_NOT_ACCEPTABLE:
+                    Toast.makeText(RegisterRActivity.this, "an user with the given email already exists.", Toast.LENGTH_SHORT).show();
+                    edtxt2.setText("");
+                    edtxt3.setText("");
+                    edtxt4.setText("");
+                    return;
+            }
             edtxt3.setText("");
             edtxt3.setBackgroundColor(0xFFFF0000);
             edtxt4.setText("");
             edtxt4.setBackgroundColor(0xFFFF0000);
             Toast.makeText(RegisterRActivity.this,"The given password does not match the password confirmation!",Toast.LENGTH_SHORT).show();
+            Log.d(TAG,"");
+
+            return;
         }
     }
+
 
 
 
