@@ -45,7 +45,7 @@ public class ListSRActivity extends AppCompatActivity {
          listSR = (ListView) findViewById(R.id.listViewListSR);
 
         try {
-            URL url = new URL("http://localhost:8080/api/systematicreview");
+            URL url = new URL(BuildConfig.BACKEND_HOST+"/api/systematicreview");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(15000);

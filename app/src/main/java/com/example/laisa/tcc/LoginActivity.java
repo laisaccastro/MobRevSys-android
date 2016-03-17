@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         String password = edtxt2.getText().toString();
 
         try {
-            URL url = new URL("http://localhost:8080/api/login");
+            URL url = new URL(BuildConfig.BACKEND_HOST+"/api/login");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(15000);

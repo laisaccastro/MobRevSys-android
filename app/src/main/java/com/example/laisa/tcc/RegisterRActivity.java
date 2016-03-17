@@ -129,9 +129,8 @@ public class RegisterRActivity extends AppCompatActivity {
             String country = map.get("country");
             if (password.equals(cpassword)) {
                 try {
-                    URL url = new URL("http://localhost:8080/api/register");
-                    Proxy proxy = new Proxy(Proxy.Type.HTTP,new InetSocketAddress("10.0.2.2",8090));
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection(proxy);
+                    URL url = new URL(BuildConfig.BACKEND_HOST+"/api/register");
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setReadTimeout(10000);
                     conn.setConnectTimeout(15000);
                     conn.setRequestProperty("Content-Type",

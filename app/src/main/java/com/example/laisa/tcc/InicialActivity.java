@@ -138,7 +138,7 @@ public class InicialActivity extends AppCompatActivity implements GoogleApiClien
                 // Signed in successfully, show authenticated UI.
                 GoogleSignInAccount acct = result.getSignInAccount();
                 String idToken = acct.getIdToken();
-                URL url = new URL("http://localhost:8080/api/login/token");
+                URL url = new URL(BuildConfig.BACKEND_HOST+"/api/login/token");
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                 conn.setReadTimeout(10000);
                 conn.setConnectTimeout(15000);

@@ -14,9 +14,13 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            buildConfigField "String", "BACKEND_HOST", "http://10.0.2.2:8080"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BACKEND_HOST", "http://10.0.2.2:8080"
         }
     }
 }
