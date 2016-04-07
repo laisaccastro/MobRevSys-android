@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ReviewedStudy {
 
-    private long Id;
+    private long id;
     private Study study;
     private Reviewer reviewer;
     private boolean included;

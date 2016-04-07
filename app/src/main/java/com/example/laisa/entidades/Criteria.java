@@ -4,7 +4,7 @@ import com.example.laisa.Type.CriteriaType;
 
 public class Criteria {
 
-    private long Id;
+    private long id;
     private String description;
     private CriteriaType type;
     

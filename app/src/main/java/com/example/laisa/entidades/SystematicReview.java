@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class SystematicReview {
 
-    private long Id;
+    private long id;
     private Reviewer owner;
     private String title;
     private String objective;
@@ -19,11 +19,11 @@ public class SystematicReview {
 
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long Id) {
-        this.Id = Id;
+        this.id = Id;
     }
 
     public Reviewer getOwner() {
@@ -90,6 +90,12 @@ public class SystematicReview {
         this.divisionType = divisionType;
     }
 
+    @Override
+    public String toString() {
+        return  "Owner:" + owner.getEmail() +
+                "\nTitle:" + title +
+                "\nObjective:" + objective;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -103,7 +109,7 @@ public class SystematicReview {
             return false;
         }
         final SystematicReview other = (SystematicReview) obj;
-        if (this.Id != other.Id) {
+        if (this.id != other.id) {
             return false;
         }
         if (!Objects.equals(this.title, other.title)) {

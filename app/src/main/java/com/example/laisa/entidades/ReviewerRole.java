@@ -7,17 +7,17 @@ import java.util.Objects;
 
 public class ReviewerRole {
 
-    public long Id;
+    public long id;
     private SystematicReview systematicReview;
     private Reviewer reviewer;
     private List<RoleType> roles;
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long Id) {
-        this.Id = Id;
+        this.id = Id;
     }
 
     public SystematicReview getSystematicReview() {
@@ -56,7 +56,7 @@ public class ReviewerRole {
             return false;
         }
         final ReviewerRole other = (ReviewerRole) obj;
-        if (this.Id != other.Id) {
+        if (this.id != other.id) {
             return false;
         }
         if (!Objects.equals(this.systematicReview, other.systematicReview)) {
