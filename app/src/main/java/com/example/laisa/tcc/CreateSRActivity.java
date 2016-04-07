@@ -1,9 +1,17 @@
 package com.example.laisa.tcc;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.laisa.JWTUtil.JwtToken;
 import com.example.laisa.Type.PaperDivisionType;
 import com.example.laisa.Type.RoleType;
 import com.example.laisa.entidades.BibFile;
@@ -23,14 +32,21 @@ import com.example.laisa.entidades.Reviewer;
 import com.example.laisa.entidades.ReviewerRole;
 import com.example.laisa.entidades.SystematicReview;
 import com.google.gson.Gson;
+import com.nononsenseapps.filepicker.FilePickerActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -38,30 +54,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class CreateSRActivity extends AppCompatActivity {
 
-    EditText edtxt1,edtxt2,edtxt3,edtxt4,edtxt5,edtxt6;
-    Button btt1,btt2,btt3,btt4;
-    List<String> inclusionCriteria,exclusionCriteria,questions;
-    List <ReviewerRole> reviewerRoles;
-    ListView inclusionList,exclusionList;
-    ArrayAdapter inclusionAdapter,exclusionAdapter;
-    final CharSequence[] roles = {"SELECTION","REVIEW","VTM_REVIEW"};
+    private final int FILE_CODE = 3234;
+
+    EditText edtxt1, edtxt2, edtxt3, edtxt4, edtxt5;
+    Button btt1, btt2, btt3, btt4, bttBib;
+    List<String> inclusionCriteria, exclusionCriteria, questions;
+    List<ReviewerRole> reviewerRoles;
+    ListView inclusionList, exclusionList;
+    ArrayAdapter inclusionAdapter, exclusionAdapter;
+    final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW", "VTM_REVIEW"};
+    final boolean[] checkedRoles = new boolean[]{false, false, false};
     List<RoleType> selectedRoles;
     private static final String TAG = "CreateActivity";
     private PaperDivisionType divisionType;
+    private boolean readyToCreate = false;
+    private MenuItem createButton;
+    private Uri bibUri;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (JwtToken.getJWT(CreateSRActivity.this) == null) {
+            Intent i = new Intent(CreateSRActivity.this, InicialActivity.class);
+            startActivity(i);
+            finish();
+        }
         setContentView(R.layout.activity_create_sr);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(toolbar!=null){
+        if (toolbar != null) {
             getSupportActionBar().setTitle("Create Systematic Review");
         }
 
@@ -82,20 +110,21 @@ public class CreateSRActivity extends AppCompatActivity {
         btt4 = (Button) findViewById(R.id.BttQuestion);
         btt4.setOnClickListener(questionListener);
 
+        bttBib = (Button) findViewById(R.id.bibSR);
+        bttBib.setOnClickListener(bibBtListener);
+
         inclusionList = (ListView) findViewById(R.id.listViewInclusion);
         inclusionCriteria = new ArrayList<>();
-        inclusionAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,inclusionCriteria);
+        inclusionAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, inclusionCriteria);
         inclusionList.setAdapter(inclusionAdapter);
 
         exclusionList = (ListView) findViewById(R.id.listViewExclusion);
         exclusionCriteria = new ArrayList<>();
-        exclusionAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,exclusionCriteria);
+        exclusionAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, exclusionCriteria);
         exclusionList.setAdapter(exclusionAdapter);
 
-        questions= new ArrayList<>();
+        questions = new ArrayList<>();
         reviewerRoles = new ArrayList<>();
-
-
 
 
     }
@@ -104,12 +133,15 @@ public class CreateSRActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             String criteria = edtxt4.getText().toString();
-            if(exclusionCriteria.contains(criteria)){
-                Toast.makeText(CreateSRActivity.this,"Criteria has already been created",Toast.LENGTH_SHORT).show();
+            edtxt4.setText("");
+            if (exclusionCriteria.contains(criteria)) {
+                Toast.makeText(CreateSRActivity.this, "Criteria has already been created", Toast.LENGTH_SHORT).show();
 
-            }else{
+            } else {
                 exclusionCriteria.add(criteria);
                 exclusionAdapter.notifyDataSetChanged();
+                Toast.makeText(CreateSRActivity.this, "Criteria created", Toast.LENGTH_SHORT).show();
+
             }
         }
     };
@@ -118,12 +150,15 @@ public class CreateSRActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             String criteria = edtxt4.getText().toString();
-            if(inclusionCriteria.contains(criteria)){
-                Toast.makeText(CreateSRActivity.this,"Criteria has already been created",Toast.LENGTH_SHORT).show();
+            edtxt4.setText("");
+            if (inclusionCriteria.contains(criteria)) {
+                Toast.makeText(CreateSRActivity.this, "Criteria has already been created", Toast.LENGTH_SHORT).show();
 
-            }else{
+            } else {
                 inclusionCriteria.add(criteria);
                 inclusionAdapter.notifyDataSetChanged();
+                Toast.makeText(CreateSRActivity.this, "Criteria created", Toast.LENGTH_SHORT).show();
+
             }
 
         }
@@ -133,31 +168,30 @@ public class CreateSRActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             final String reviewerEmail = edtxt5.getText().toString();
-            boolean exists=false;
+            edtxt5.setText("");
+            boolean exists = false;
 
-            for(ReviewerRole r:reviewerRoles){
-                if(r.getReviewer().getEmail().equals(reviewerEmail)){
-                    exists=true;
+            for (ReviewerRole r : reviewerRoles) {
+                if (r.getReviewer().getEmail().equals(reviewerEmail)) {
+                    exists = true;
                     break;
                 }
             }
-            if(exists){
-                Toast.makeText(CreateSRActivity.this,"Reviewer has already been added",Toast.LENGTH_SHORT).show();
+            if (exists) {
+                Toast.makeText(CreateSRActivity.this, "Reviewer has already been added", Toast.LENGTH_SHORT).show();
 
-            }else{
+            } else {
                 selectedRoles = new ArrayList();
                 final ReviewerRole reviewerRole = new ReviewerRole();
                 Reviewer r = new Reviewer();
                 r.setEmail(reviewerEmail);
                 reviewerRole.setReviewer(r);
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateSRActivity.this);
-                builder.setMessage(R.string.reviewerAddMessage);
-                builder.setMultiChoiceItems(roles, null, new DialogInterface.OnMultiChoiceClickListener() {
+                builder.setMultiChoiceItems(roles, checkedRoles, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        if(isChecked)
-                        {
-                            switch (roles[which].toString()){
+                        if (isChecked) {
+                            switch (roles[which].toString()) {
                                 case "REVIEW":
                                     selectedRoles.add(RoleType.REVIEW);
                                     break;
@@ -168,10 +202,8 @@ public class CreateSRActivity extends AppCompatActivity {
                                     selectedRoles.add(RoleType.VTM_REVIEW);
                                     break;
                             }
-                        }
-                        else
-                        {
-                            switch (roles[which].toString()){
+                        } else {
+                            switch (roles[which].toString()) {
                                 case "REVIEW":
                                     selectedRoles.remove(RoleType.REVIEW);
                                     break;
@@ -188,7 +220,7 @@ public class CreateSRActivity extends AppCompatActivity {
                 }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(selectedRoles.contains("Selection")){
+                        if (selectedRoles.contains(RoleType.SELECTION)) {
                             AlertDialog.Builder builderSelection = new AlertDialog.Builder(CreateSRActivity.this);
                             builderSelection.setTitle("Selection Method")
                                     .setMessage("Select the selection method to be used")
@@ -230,20 +262,32 @@ public class CreateSRActivity extends AppCompatActivity {
         public void onClick(View v) {
             edtxt3 = (EditText) findViewById(R.id.QuestionsSR);
             String question = edtxt3.getText().toString();
-            if(questions.contains(question)){
-                Toast.makeText(CreateSRActivity.this,"Research question has already been added",Toast.LENGTH_SHORT).show();
+            if (questions.contains(question)) {
+                Toast.makeText(CreateSRActivity.this, "Research question has already been added", Toast.LENGTH_SHORT).show();
 
-            }else{
+            } else {
                 questions.add(question);
+                edtxt3.setText("");
+                Toast.makeText(CreateSRActivity.this, "Research question added", Toast.LENGTH_SHORT).show();
             }
 
 
         }
     };
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_create_sr, menu);
+        createButton = menu.findItem(R.id.action_create);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        createButton.setEnabled(readyToCreate);
+        super.onPrepareOptionsMenu(menu);
         return true;
     }
 
@@ -263,7 +307,7 @@ public class CreateSRActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void createRS(){
+    public void createRS() {
         edtxt1 = (EditText) findViewById(R.id.TitleSR);
         String title = edtxt1.getText().toString();
 
@@ -271,56 +315,152 @@ public class CreateSRActivity extends AppCompatActivity {
         String objective = edtxt2.getText().toString();
 
 
-        edtxt6 = (EditText) findViewById(R.id.bibSR);
-        String bib = edtxt6.getText().toString();
+        SystematicReview srev = new SystematicReview();
+        srev.setTitle(title);
+        srev.setObjective(objective);
+        srev.setResearchQuestions(questions);
+        srev.setParticipatingReviewers(reviewerRoles);
+        srev.setDivisionType(divisionType);
+        CreateSRTask createSRTask = new CreateSRTask();
+        createSRTask.execute(srev);
 
-        try {
-            URL url = new URL(BuildConfig.BACKEND_HOST+"/api/systematicreview");
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestProperty("Content-Type",
-                    "application/json");
-            SharedPreferences pref = getSharedPreferences("mobrevsys",MODE_PRIVATE);
-            conn.setRequestProperty("Authorization",pref.getString("jwt",""));
-            conn.setRequestMethod("POST");
+    }
 
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
+    private class CreateSRTask extends AsyncTask<SystematicReview, Void, Void> {
+        @Override
+        protected Void doInBackground(SystematicReview... params) {
+            SystematicReview srev = params[0];
             try {
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                SystematicReview srev = new SystematicReview();
-                BibFile bibFile =new BibFile();
-                bibFile.setUrl(new URL(bib));
-                srev.setTitle(title);
-                srev.setObjective(objective);
-                srev.setResearchQuestions(questions);
-                srev.setBib(bibFile);
-                srev.setParticipatingReviewers(reviewerRoles);
-                srev.setDivisionType(divisionType);
+                URL urlbib = new URL(BuildConfig.BACKEND_HOST + "/api/bib");
+                HttpURLConnection connbib = (HttpURLConnection) urlbib.openConnection();
+                connbib.setReadTimeout(10000);
+                connbib.setConnectTimeout(15000);
+                connbib.setRequestProperty("Content-Type",
+                        "application/octet-stream");
+                SharedPreferences pref = getSharedPreferences("mobrevsys", MODE_PRIVATE);
+                connbib.setRequestProperty("Authorization", pref.getString("jwt", ""));
+                connbib.setRequestMethod("POST");
+
+                connbib.setDoInput(true);
+                connbib.setDoOutput(true);
+
+                OutputStream osbib = connbib.getOutputStream();
+                osbib.write(getBytes(bibUri));
+                osbib.flush();
+                osbib.close();
+                int responseCode = connbib.getResponseCode();
+                InputStream is = connbib.getInputStream();
                 Gson gson = new Gson();
-                String srevJson = gson.toJson(srev);
-                writer.write(srevJson);
-                writer.flush();
-                writer.close();
-                os.close();
-                int responseCode = conn.getResponseCode();
-                Log.i(TAG, "Signed in as: " + responseCode);
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                BibFile bib = gson.fromJson(br, BibFile.class);
+                srev.setBib(bib);
+
+
+                URL url = new URL(BuildConfig.BACKEND_HOST + "/api/systematicreview");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestProperty("Content-Type",
+                        "application/json");
+                conn.setRequestProperty("Authorization", pref.getString("jwt", ""));
+                conn.setRequestMethod("POST");
+
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                try {
+                    OutputStream os = conn.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+                    String srevJson = gson.toJson(srev);
+
+                    writer.write(srevJson);
+                    writer.flush();
+                    writer.close();
+                    os.close();
+                    responseCode = conn.getResponseCode();
+                    Log.i(TAG, "Response code: " + responseCode);
+                } catch (IOException e) {
+                    Log.e(TAG, "Error sending request to backend.", e);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
             } catch (IOException e) {
-                Log.e(TAG, "Error sending ID token to backend.", e);
+                e.printStackTrace();
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            finish();
+        }
+    }
 
+    private View.OnClickListener bibBtListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(CreateSRActivity.this, FilePickerActivity.class);
+            i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+            startActivityForResult(i, FILE_CODE);
+        }
+    };
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
+            if (data.getBooleanExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)) {
+                // For JellyBean and above
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    ClipData clip = data.getClipData();
+
+                    if (clip != null) {
+                        for (int i = 0; i < clip.getItemCount(); i++) {
+                            Uri uri = clip.getItemAt(i).getUri();
+                            saveUri(uri);
+                        }
+                    }
+                    // For Ice Cream Sandwich
+                } else {
+                    ArrayList<String> paths = data.getStringArrayListExtra
+                            (FilePickerActivity.EXTRA_PATHS);
+
+                    if (paths != null) {
+                        for (String path : paths) {
+                            Uri uri = Uri.parse(path);
+                            saveUri(uri);
+                        }
+                    }
+                }
+
+            } else {
+                Uri uri = data.getData();
+                saveUri(uri);
+            }
+        }
+    }
+
+    private void saveUri(Uri uri) {
+        bibUri = uri;
+        readyToCreate = true;
+        invalidateOptionsMenu();
+    }
+
+    public byte[] getBytes(Uri uri) throws IOException {
+
+        InputStream is = getContentResolver().openInputStream(uri);
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = is.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 
 }

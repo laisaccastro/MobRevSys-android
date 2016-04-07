@@ -45,6 +45,11 @@ public class InicialActivity extends AppCompatActivity implements GoogleApiClien
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(JwtToken.getJWT(InicialActivity.this)!=null){
+            Intent i = new Intent(InicialActivity.this,ListSRActivity.class);
+            startActivity(i);
+            finish();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicial);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -3,6 +3,7 @@ package com.example.laisa.tcc;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -104,65 +106,86 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         String email = edtxt1.getText().toString();
         edtxt2=(EditText) findViewById(R.id.PasswordLogin);
         String password = edtxt2.getText().toString();
+        LoginTask loginTask = new LoginTask();
+        loginTask.execute(email,password);
 
-        try {
-            URL url = new URL(BuildConfig.BACKEND_HOST+"/api/login");
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            try {
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                Reviewer reviewer = new Reviewer();
-                reviewer.setEmail(email);
-                reviewer.setPassword(password);
-                Gson gson = new Gson();
-                String reviewerJson = gson.toJson(reviewer);
-                writer.write(reviewerJson);
-                writer.flush();
-                writer.close();
-                os.close();
-                InputStream is = conn.getInputStream();
-                Scanner scanner = new Scanner(is);
-                int responseCode = conn.getResponseCode();
-                switch (responseCode){
-                    case HttpsURLConnection.HTTP_OK:
-                        JwtToken.storeJWT(scanner.next(), LoginActivity.this);
-                        Util.saveEmail(email,LoginActivity.this);
-                        Intent i = new Intent(LoginActivity.this,ListSRActivity.class);
-                        startActivity(i);
-                        break;
-                    case HttpsURLConnection.HTTP_UNAUTHORIZED:
-                        Toast.makeText(LoginActivity.this,"The given password does not match. Please try again.",Toast.LENGTH_SHORT).show();
-                        edtxt2.setText("");
-                        break;
-                    case HttpsURLConnection.HTTP_NOT_FOUND:
-                        Toast.makeText(LoginActivity.this,"There is no user with the given email.",Toast.LENGTH_SHORT).show();
-                        edtxt1.setText("");
-                        edtxt2.setText("");
-                        break;
-                }
-                Log.i(TAG, "Signed in as: " + responseCode);
-            } catch (IOException e) {
-                Log.e(TAG, "Error sending ID token to backend.", e);
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
+    private class LoginTask extends AsyncTask<String,Void,String>{
+
+        private int responseCode =-1;
+        @Override
+        protected String doInBackground(String... params) {
+            String email = params[0];
+            String password = params[1];
+            try {
+                URL url = new URL(BuildConfig.BACKEND_HOST+"/api/login");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestProperty("Content-Type",
+                        "application/json");
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                try {
+                    OutputStream os = conn.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+                    Reviewer reviewer = new Reviewer();
+                    reviewer.setEmail(email);
+                    reviewer.setPassword(password);
+                    Gson gson = new Gson();
+                    String reviewerJson = gson.toJson(reviewer);
+                    writer.write(reviewerJson);
+                    writer.flush();
+                    writer.close();
+                    os.close();
+                    Log.i(TAG, "Signed in as: ");
+                    InputStream is = conn.getInputStream();
+                    Scanner scanner = new Scanner(is);
+                    responseCode = conn.getResponseCode();
+                    if(responseCode == HttpURLConnection.HTTP_OK) {
+                        Util.saveEmail(email,LoginActivity.this);
+                        return scanner.next();
+                    }
+                    Log.i(TAG, "Signed in as: " + responseCode);
+                } catch (IOException e) {
+                    Log.e(TAG, "Error sending ID token to backend.", e);
+                    return null;
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String jwt) {
+            switch (responseCode){
+                case HttpsURLConnection.HTTP_OK:
+                    JwtToken.storeJWT(jwt, LoginActivity.this);
+                    Intent i = new Intent(LoginActivity.this,ListSRActivity.class);
+                    startActivity(i);
+                    break;
+                case HttpsURLConnection.HTTP_UNAUTHORIZED:
+                    Toast.makeText(LoginActivity.this,"The given password does not match. Please try again.",Toast.LENGTH_SHORT).show();
+                    edtxt2.setText("");
+                    break;
+                case HttpsURLConnection.HTTP_NOT_FOUND:
+                    Toast.makeText(LoginActivity.this,"There is no user with the given email.",Toast.LENGTH_SHORT).show();
+                    edtxt1.setText("");
+                    edtxt2.setText("");
+                    break;
+            }
+        }
+    }
 
 
 
