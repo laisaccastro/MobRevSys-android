@@ -3,9 +3,16 @@ apply plugin: 'com.google.gms.google-services'
 
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'MyAndroidKey'
+            keyPassword '123456'
+            storeFile file('/home/pantera/keystores/android.jks')
+            storePassword 'revisaosistematica'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "com.example.laisa.tcc"
         minSdkVersion 9
@@ -15,18 +22,19 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BACKEND_HOST", "\"http://10.0.2.2:9080\""
+            buildConfigField "String", "BACKEND_HOST", "\"http://10.0.2.2:5000\""
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "BACKEND_HOST", "\"http://10.0.2.2:9080\""
+            buildConfigField "String", "BACKEND_HOST", "\"http://mobile-revis.herokuapp.com\""
+            signingConfig signingConfigs.config
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
