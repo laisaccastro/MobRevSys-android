@@ -1,9 +1,10 @@
 package com.example.laisa.entidades;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class BibFile {
+public class BibFile implements Serializable{
 
     private long id;
     private String name;

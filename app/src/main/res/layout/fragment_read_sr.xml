@@ -1,0 +1,138 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.laisa.tcc.ReadSRFragment">
+
+    <LinearLayout
+        android:id="@+id/Layout_central"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:layout_weight="7"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="26dp"
+            android:layout_marginBottom="10px"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/TextTitleSR"
+            android:layout_marginBottom="20px"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abstract"
+            android:textSize="26dp"
+            android:layout_marginBottom="10px"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/TextAbstractSR"
+            />
+
+        <LinearLayout
+            android:id="@+id/Layout_baixo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:paddingTop="20dp"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:orientation="vertical" >
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Comment"
+                android:hint="@string/HintCommentStr" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/CommentBttStr"
+                android:id="@+id/BttComment"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <View
+        android:layout_width="6dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
+        ></View>
+    <LinearLayout
+        android:id="@+id/Layout_direito"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:layout_weight="3"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/InclusionCriteriaTextStr"
+            android:id="@+id/TextInclusionCriteria"
+            android:textSize="24px"
+            />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="200px"
+            android:id="@id/listViewInclusion"
+            ></ListView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ExclusionCriteriaTextStr"
+            android:id="@+id/TextExclusionCriteria"
+            android:textSize="24px"
+            />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="200px"
+            android:id="@id/listViewExclusion"
+            ></ListView>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/InclusionBttStr"
+            android:id="@+id/BttInclusion"
+            android:layout_gravity="center_horizontal"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/BttExclusion"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/ExclusionBttStr" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/BttUndecided"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/UndecidedBttStr" />
+    </LinearLayout>
+
+
+</LinearLayout>

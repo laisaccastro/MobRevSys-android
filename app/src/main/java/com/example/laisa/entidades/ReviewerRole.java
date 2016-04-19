@@ -2,13 +2,14 @@ package com.example.laisa.entidades;
 
 import com.example.laisa.Type.RoleType;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class ReviewerRole {
+public class ReviewerRole implements Serializable{
 
     public long id;
-    private SystematicReview systematicReview;
+    private transient SystematicReview systematicReview;
     private Reviewer reviewer;
     private List<RoleType> roles;
 

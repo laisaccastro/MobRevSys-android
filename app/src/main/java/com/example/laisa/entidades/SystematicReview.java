@@ -1,21 +1,29 @@
 package com.example.laisa.entidades;
 
 import com.example.laisa.Type.PaperDivisionType;
+import com.example.laisa.Type.RoleType;
+import com.example.laisa.Type.StageType;
+import com.example.laisa.Util;
+import com.example.laisa.tcc.InicialActivity;
+import com.example.laisa.tcc.ListSRActivity;
+import com.example.laisa.tcc.MyApplication;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class SystematicReview {
+public class SystematicReview implements Serializable{
 
     private long id;
     private Reviewer owner;
     private String title;
-    private String objective;
+    private List<String> objectives;
     private List<String> researchQuestions;
     private List<Criteria> criteria;
     private List<ReviewerRole> participatingReviewers;
     private BibFile bib;
     private PaperDivisionType divisionType;
+    private StageType stage;
 
 
     public long getId() {
@@ -40,14 +48,6 @@ public class SystematicReview {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getObjective() {
-        return objective;
-    }
-
-    public void setObjective(String objective) {
-        this.objective = objective;
     }
 
     public List<String> getResearchQuestions() {
@@ -90,11 +90,41 @@ public class SystematicReview {
         this.divisionType = divisionType;
     }
 
+    public List<String> getObjectives() {
+        return objectives;
+    }
+
+    public void setObjectives(List<String> objectives) {
+        this.objectives = objectives;
+    }
+
+    public StageType getStage() {
+        return stage;
+    }
+
+    public void setStage(StageType stage) {
+        this.stage = stage;
+    }
+
     @Override
     public String toString() {
-        return  "Owner:" + owner.getEmail() +
-                "\nTitle:" + title +
-                "\nObjective:" + objective;
+        String useremail = MyApplication.getCurrentUserEmail();
+        String role = (useremail.equals(owner.getEmail())) ? "Owner" : "Participant";
+        String participantRole = "";
+        if(role.equals("Participant")){
+            for(ReviewerRole rr: participatingReviewers){
+                if(rr.getReviewer().getEmail().equals(useremail)){
+                    participantRole = "\n";
+                    for(RoleType roletype: rr.getRoles()){
+                        participantRole = participantRole + roletype.name()+"\t";
+                    }
+                }
+            }
+        }
+        return  "Title: " + title +
+                "\n"+role+
+                participantRole+
+                "\n"+"Current Stage: "+stage;
     }
 
     @Override
@@ -113,9 +143,6 @@ public class SystematicReview {
             return false;
         }
         if (!Objects.equals(this.title, other.title)) {
-            return false;
-        }
-        if (!Objects.equals(this.objective, other.objective)) {
             return false;
         }
         if (!Objects.equals(this.owner, other.owner)) {

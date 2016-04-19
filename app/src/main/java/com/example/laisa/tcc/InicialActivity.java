@@ -1,5 +1,6 @@
 package com.example.laisa.tcc;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.laisa.JWTUtil.JwtToken;
+import com.example.laisa.Util;
 import com.example.laisa.entidades.Reviewer;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -42,10 +44,12 @@ public class InicialActivity extends AppCompatActivity implements GoogleApiClien
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "GoogleSignInActivity";
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if(JwtToken.getJWT(InicialActivity.this)!=null){
+            Util.getEmail(getApplicationContext());
             Intent i = new Intent(InicialActivity.this,ListSRActivity.class);
             startActivity(i);
             finish();
@@ -54,7 +58,7 @@ public class InicialActivity extends AppCompatActivity implements GoogleApiClien
         setContentView(R.layout.activity_inicial);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        context = this.getApplicationContext();
 
         btt1=(Button) findViewById(R.id.BttLoginInicial);
         btt1.setOnClickListener(loginListener);

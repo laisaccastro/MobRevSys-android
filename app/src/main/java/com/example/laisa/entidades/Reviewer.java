@@ -1,17 +1,16 @@
 package com.example.laisa.entidades;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Reviewer {
+public class Reviewer implements Serializable{
 
     private String name;
     private String email;
     private String password;
     private String affiliatedUniversity;
     private String country;
-    private List<SystematicReview> reviews;
-
 
     public String getName() {
         return name;
@@ -53,14 +52,6 @@ public class Reviewer {
         this.country = country;
     }
 
-    public List<SystematicReview> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<SystematicReview> reviews) {
-        this.reviews = reviews;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -83,9 +74,6 @@ public class Reviewer {
             return false;
         }
         if (!Objects.equals(this.country, other.country)) {
-            return false;
-        }
-        if (!Objects.equals(this.reviews, other.reviews)) {
             return false;
         }
         return true;

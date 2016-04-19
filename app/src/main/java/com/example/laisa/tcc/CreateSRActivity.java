@@ -25,9 +25,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.laisa.JWTUtil.JwtToken;
+import com.example.laisa.Type.CriteriaType;
 import com.example.laisa.Type.PaperDivisionType;
 import com.example.laisa.Type.RoleType;
+import com.example.laisa.Type.StageType;
 import com.example.laisa.entidades.BibFile;
+import com.example.laisa.entidades.Criteria;
 import com.example.laisa.entidades.Reviewer;
 import com.example.laisa.entidades.ReviewerRole;
 import com.example.laisa.entidades.SystematicReview;
@@ -63,8 +66,8 @@ public class CreateSRActivity extends AppCompatActivity {
     private final int FILE_CODE = 3234;
 
     EditText edtxt1, edtxt2, edtxt3, edtxt4, edtxt5;
-    Button btt1, btt2, btt3, btt4, bttBib;
-    List<String> inclusionCriteria, exclusionCriteria, questions;
+    Button btt1, btt2, btt3, btt4, bttBib, bttObj;
+    List<String> inclusionCriteria, exclusionCriteria, questions, objectives;
     List<ReviewerRole> reviewerRoles;
     ListView inclusionList, exclusionList;
     ArrayAdapter inclusionAdapter, exclusionAdapter;
@@ -92,6 +95,7 @@ public class CreateSRActivity extends AppCompatActivity {
         if (toolbar != null) {
             getSupportActionBar().setTitle("Create Systematic Review");
         }
+        edtxt2 = (EditText) findViewById(R.id.ObjectiveSR);
 
         edtxt4 = (EditText) findViewById(R.id.CriteriaSR);
 
@@ -113,6 +117,9 @@ public class CreateSRActivity extends AppCompatActivity {
         bttBib = (Button) findViewById(R.id.bibSR);
         bttBib.setOnClickListener(bibBtListener);
 
+        bttObj = (Button) findViewById(R.id.BttObjective);
+        bttObj.setOnClickListener(objectiveListener);
+
         inclusionList = (ListView) findViewById(R.id.listViewInclusion);
         inclusionCriteria = new ArrayList<>();
         inclusionAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, inclusionCriteria);
@@ -125,9 +132,27 @@ public class CreateSRActivity extends AppCompatActivity {
 
         questions = new ArrayList<>();
         reviewerRoles = new ArrayList<>();
+        objectives = new ArrayList<>();
 
 
     }
+
+    private View.OnClickListener objectiveListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            edtxt2 = (EditText) findViewById(R.id.ObjectiveSR);
+            String objective = edtxt2.getText().toString();
+            if (objectives.contains(objective)) {
+                Toast.makeText(CreateSRActivity.this, "Objective has already been added", Toast.LENGTH_SHORT).show();
+
+            } else {
+                objectives.add(objective);
+                edtxt2.setText("");
+                Toast.makeText(CreateSRActivity.this, "Objective added", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    };
 
     private View.OnClickListener exclusionListener = new View.OnClickListener() {
         @Override
@@ -215,6 +240,7 @@ public class CreateSRActivity extends AppCompatActivity {
                                     break;
                             }
                         }
+                        //TODO Tipo de divisao deve ser escolhido apenas uma vez por revisão, Radio Button??
                     }
 
                 }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -311,16 +337,23 @@ public class CreateSRActivity extends AppCompatActivity {
         edtxt1 = (EditText) findViewById(R.id.TitleSR);
         String title = edtxt1.getText().toString();
 
-        edtxt2 = (EditText) findViewById(R.id.ObjectiveSR);
-        String objective = edtxt2.getText().toString();
-
-
+        List<Criteria> criterias = new ArrayList<>();
+        for(String s: inclusionCriteria){
+            Criteria c = new Criteria(s, CriteriaType.INCLUSION);
+            criterias.add(c);
+        }
+        for(String s:  exclusionCriteria){
+            Criteria c = new Criteria(s,CriteriaType.EXCLUSION);
+            criterias.add(c);
+        }
         SystematicReview srev = new SystematicReview();
         srev.setTitle(title);
-        srev.setObjective(objective);
+        srev.setObjectives(objectives);
         srev.setResearchQuestions(questions);
+        srev.setCriteria(criterias);
         srev.setParticipatingReviewers(reviewerRoles);
         srev.setDivisionType(divisionType);
+        srev.setStage(StageType.INITIAL_SELECTION);
         CreateSRTask createSRTask = new CreateSRTask();
         createSRTask.execute(srev);
 
@@ -348,7 +381,7 @@ public class CreateSRActivity extends AppCompatActivity {
                 osbib.write(getBytes(bibUri));
                 osbib.flush();
                 osbib.close();
-                int responseCode = connbib.getResponseCode();
+                int responseCode;
                 InputStream is = connbib.getInputStream();
                 Gson gson = new Gson();
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -373,7 +406,6 @@ public class CreateSRActivity extends AppCompatActivity {
                     BufferedWriter writer = new BufferedWriter(
                             new OutputStreamWriter(os, "UTF-8"));
                     String srevJson = gson.toJson(srev);
-
                     writer.write(srevJson);
                     writer.flush();
                     writer.close();

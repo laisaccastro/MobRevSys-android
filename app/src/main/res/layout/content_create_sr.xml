@@ -33,9 +33,20 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:hint="@string/ObjectiveCreateHintStr"
-        android:layout_alignRight="@+id/TitleSR"
-        android:layout_alignEnd="@+id/TitleSR"
+        android:layout_toLeftOf="@+id/BttObjective"
+        android:layout_toStartOf="@+id/BttObjective"
         android:textSize="15sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/BttObjective"
+        android:text="@string/QuestionBttStr"
+        android:textSize="10dp"
+        android:layout_alignBottom="@+id/ObjectiveSR"
+        android:layout_alignRight="@+id/CriteriaSR"
+        android:layout_alignEnd="@+id/CriteriaSR"
+        android:layout_below="@+id/TitleSR" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -99,7 +110,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="120dp"
         android:id="@+id/relativeListLayout"
         android:layout_below="@+id/BttInclusionCriteria"
         android:layout_weight="1">

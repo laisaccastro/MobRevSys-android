@@ -12,10 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.laisa.JWTUtil.JwtToken;
+import com.example.laisa.Util;
 import com.example.laisa.entidades.SystematicReview;
 import com.google.gson.Gson;
 
@@ -47,6 +50,7 @@ public class ListSRActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(JwtToken.getJWT(ListSRActivity.this)==null){
+            Util.getEmail(getApplicationContext());
             Log.d("pass","hello");
             Intent i = new Intent(ListSRActivity.this,InicialActivity.class);
             startActivity(i);
@@ -63,6 +67,7 @@ public class ListSRActivity extends AppCompatActivity {
         listSR = (ListView) findViewById(R.id.listViewListSR);
         adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,srlist);
         listSR.setAdapter(adapter);
+        listSR.setOnItemClickListener(onItemClickListener);
         adapter.notifyDataSetChanged();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -80,6 +85,15 @@ public class ListSRActivity extends AppCompatActivity {
         ListSRTask listSRTask = new ListSRTask();
         listSRTask.execute();
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Util.getEmail(getApplicationContext());
+        ListSRTask listSRTask = new ListSRTask();
+        listSRTask.execute();
 
     }
 
@@ -107,10 +121,12 @@ public class ListSRActivity extends AppCompatActivity {
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 int responseCode = conn.getResponseCode();
                 Gson gson = new Gson();
+                //TODO O que esta acontecendo com os enums e com os autores???
                 SystematicReview[] sr =  gson.fromJson(br,SystematicReview[].class);
-                srlist = Arrays.asList(sr);
-                for(SystematicReview s:srlist){
-                    adapter.add(s);
+                List<SystematicReview> tmpSrList = Arrays.asList(sr);
+                srlist.clear();
+                for(SystematicReview s:tmpSrList){
+                    srlist.add(s);
                 }
                 context = getContext();
 
@@ -128,8 +144,18 @@ public class ListSRActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-//            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
+
+    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener(){
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            SystematicReview sr = (SystematicReview) listSR.getItemAtPosition(position);
+            Intent i = new Intent(ListSRActivity.this,ReadSRActivity.class);
+            i.putExtra("systematicReview",sr);
+            startActivity(i);
+        }
+    };
 
 }

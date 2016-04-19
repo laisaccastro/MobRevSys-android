@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.laisa.JWTUtil.JwtToken;
+import com.example.laisa.Util;
 import com.example.laisa.entidades.Reviewer;
 import com.google.gson.Gson;
 
@@ -163,6 +164,7 @@ public class RegisterRActivity extends AppCompatActivity {
                             scanner = new Scanner(is);
 
                         }else{
+                            Util.saveEmail(email,RegisterRActivity.this);
                             InputStream is = conn.getErrorStream();
                             scanner = new Scanner(is);
                         }

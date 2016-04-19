@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">TCC</string>
+    <string name="app_name">Mobile-Revis</string>
     <string name="action_settings">Settings</string>
-    <string name="TitleInicialStr">Mobile Systematic Rev</string>
+    <string name="TitleInicialStr">Mobile-Revis</string>
     <string name="LoginBttInicialStr">Login</string>
     <string name="RegisterBttIncialStr">Register</string>
     <string name="title_activity_list_sr">ListSRActivity</string>
@@ -15,9 +15,9 @@
     <string name="CriteriaHintStr">Criteria:</string>
     <string name="ReviewersHintStr">New participating reviewer:</string>
     <string name="ReviewersBttStr">Invite</string>
-    <string name="bibHintStr">Add URL to .bib:</string>
+    <string name="bibHintStr">Add .bib file:</string>
     <string name="TitleCreateHintStr">Title:</string>
-    <string name="ObjectiveCreateHintStr">Objective:</string>
+    <string name="ObjectiveCreateHintStr">Objectives:</string>
     <string name="QuestionsCreateHintStr">Research questions:</string>
     <string name="NameHintStr">Name:</string>
     <string name="EmailHintStr">E-mail:</string>
@@ -30,4 +30,13 @@
     <string name="token">37163664732-2e24qfubnoi9tg33vkm96b6ftujh573o.apps.googleusercontent.com</string>
     <string name="reviewerAddMessage">What is the role of the reviewer?</string>
     <string name="QuestionBttStr">Add</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="HintCommentStr">Comment</string>
+    <string name="CommentBttStr">Add comment</string>
+    <string name="InclusionBttStr">Include study</string>
+    <string name="ExclusionBttStr">Exclude study</string>
+    <string name="InclusionCriteriaTextStr">Inclusion criteria</string>
+    <string name="ExclusionCriteriaTextStr">Exclusion criteria</string>
+    <string name="UndecidedBttStr">Undecided</string>
 </resources>
