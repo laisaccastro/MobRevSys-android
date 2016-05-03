@@ -42,7 +42,7 @@ public class ReadSRFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private TextView textViewTitle, textViewAbstract;
-    private Button includeBt,excludeBt,doubtBt,commentBt;
+    private Button includeBt, excludeBt, doubtBt, commentBt;
 
     private ReviewedStudyCriteriaAdapter inclusionAdapter, exclusionAdapter;
     private ListView inclusionListView, exclusionListView;
@@ -56,7 +56,7 @@ public class ReadSRFragment extends Fragment {
         Bundle args = new Bundle();
         args.putSerializable(ARG_STUDY, study);
         args.putSerializable(ARG_CRITERIA, criteria);
-        args.putSerializable(ARG_STAGE,stage);
+        args.putSerializable(ARG_STAGE, stage);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,20 +67,20 @@ public class ReadSRFragment extends Fragment {
         if (getArguments() != null) {
             mStudy = (Study) getArguments().getSerializable(ARG_STUDY);
             mStage = (StageType) getArguments().getSerializable(ARG_STAGE);
-            for(ReviewedStudy reviewedStudy: mStudy.getReviewedStudies()){
-                if(reviewedStudy.getReviewer().getEmail().equals(MyApplication.getCurrentUserEmail())){
+            for (ReviewedStudy reviewedStudy : mStudy.getReviewedStudies()) {
+                if (reviewedStudy.getReviewer().getEmail().equals(MyApplication.getCurrentUserEmail())) {
                     mReviewedStudy = reviewedStudy;
                 }
             }
-            if(mReviewedStudy==null){
-                mReviewedStudy =  new ReviewedStudy();
+            if (mReviewedStudy == null) {
+                mReviewedStudy = new ReviewedStudy();
                 Reviewer r = new Reviewer();
                 r.setEmail(MyApplication.getCurrentUserEmail());
                 mReviewedStudy.setReviewer(r);
                 mReviewedStudy.setStudy(mStudy);
-                if(mStudy.getReviewedStudies()!=null){
+                if (mStudy.getReviewedStudies() != null) {
                     mStudy.getReviewedStudies().add(mReviewedStudy);
-                }else{
+                } else {
                     mStudy.setReviewedStudies(new ArrayList<ReviewedStudy>());
                     mStudy.getReviewedStudies().add(mReviewedStudy);
                 }
@@ -109,7 +109,7 @@ public class ReadSRFragment extends Fragment {
         commentBt = (Button) view.findViewById(R.id.BttComment);
         commentBt.setOnClickListener(commentClickListener);
 
-       updateListView();
+        updateListView();
         return view;
     }
 
@@ -119,24 +119,24 @@ public class ReadSRFragment extends Fragment {
         newReviewedCriteria.addAll(mReviewedInclusionCriteria);
         newReviewedCriteria.addAll(mReviewedExclusionCriteria);
         mReviewedStudy.setReviewedCriteria(newReviewedCriteria);
-        mStudy.getReviewedStudies().set(index,mReviewedStudy);
+        mStudy.getReviewedStudies().set(index, mReviewedStudy);
         mListener.onStudyInteraction(mStudy);
         mStudy = study;
         mReviewedStudy = null;
-        for(ReviewedStudy reviewedStudy: mStudy.getReviewedStudies()){
-            if(reviewedStudy.getReviewer().getEmail().equals(MyApplication.getCurrentUserEmail())){
+        for (ReviewedStudy reviewedStudy : mStudy.getReviewedStudies()) {
+            if (reviewedStudy.getReviewer().getEmail().equals(MyApplication.getCurrentUserEmail())) {
                 mReviewedStudy = reviewedStudy;
             }
         }
-        if(mReviewedStudy==null){
-            mReviewedStudy =  new ReviewedStudy();
+        if (mReviewedStudy == null) {
+            mReviewedStudy = new ReviewedStudy();
             Reviewer r = new Reviewer();
             r.setEmail(MyApplication.getCurrentUserEmail());
             mReviewedStudy.setReviewer(r);
             mReviewedStudy.setStudy(mStudy);
-            if(mStudy.getReviewedStudies()!=null){
+            if (mStudy.getReviewedStudies() != null) {
                 mStudy.getReviewedStudies().add(mReviewedStudy);
-            }else{
+            } else {
                 mStudy.setReviewedStudies(new ArrayList<ReviewedStudy>());
                 mStudy.getReviewedStudies().add(mReviewedStudy);
             }
@@ -151,34 +151,34 @@ public class ReadSRFragment extends Fragment {
         updateListView();
     }
 
-    public void updateListView(){
+    public void updateListView() {
         mReviewedInclusionCriteria = new ArrayList<>();
         mReviewedExclusionCriteria = new ArrayList<>();
-        for(Criteria c: mCriteria){
+        for (Criteria c : mCriteria) {
             ReviewedStudyCriteria rsc = null;
-            if(mReviewedStudy.getReviewedCriteria()==null){
+            if (mReviewedStudy.getReviewedCriteria() == null) {
                 mReviewedStudy.setReviewedCriteria(new ArrayList<ReviewedStudyCriteria>());
             }
-            for(ReviewedStudyCriteria existingRSC: mReviewedStudy.getReviewedCriteria()){
-                if(existingRSC.getCriteria().getDescription().equals(c.getDescription())){
+            for (ReviewedStudyCriteria existingRSC : mReviewedStudy.getReviewedCriteria()) {
+                if (existingRSC.getCriteria().getDescription().equals(c.getDescription())) {
                     rsc = existingRSC;
                     break;
                 }
             }
-            if(rsc == null){
+            if (rsc == null) {
                 rsc = new ReviewedStudyCriteria();
                 rsc.setCriteria(c);
             }
-            if(rsc.getCriteria().getType().equals(CriteriaType.INCLUSION)){
+            if (rsc.getCriteria().getType().equals(CriteriaType.INCLUSION)) {
                 mReviewedInclusionCriteria.add(rsc);
-            }else{
+            } else {
                 mReviewedExclusionCriteria.add(rsc);
             }
         }
-        inclusionAdapter = new ReviewedStudyCriteriaAdapter(getContext(),R.layout.inclusion_list_layout, mReviewedInclusionCriteria);
+        inclusionAdapter = new ReviewedStudyCriteriaAdapter(getContext(), R.layout.inclusion_list_layout, mReviewedInclusionCriteria);
         inclusionListView.setAdapter(inclusionAdapter);
         inclusionAdapter.notifyDataSetChanged();
-        exclusionAdapter = new ReviewedStudyCriteriaAdapter(getContext(),R.layout.inclusion_list_layout, mReviewedExclusionCriteria);
+        exclusionAdapter = new ReviewedStudyCriteriaAdapter(getContext(), R.layout.inclusion_list_layout, mReviewedExclusionCriteria);
         exclusionListView.setAdapter(exclusionAdapter);
         exclusionAdapter.notifyDataSetChanged();
     }
@@ -207,34 +207,53 @@ public class ReadSRFragment extends Fragment {
     private View.OnClickListener inclusionClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(mStage.equals(StageType.INITIAL_SELECTION)){
-                mReviewedStudy.setIncludedInitialSelection(IncludeType.INCLUDED);
-            }else{
-                mReviewedStudy.setIncludedFinalSelection(IncludeType.INCLUDED);
+            boolean anyInclusionSatisfied = false;
+            for (ReviewedStudyCriteria reviewedStudyCriteria : mReviewedInclusionCriteria) {
+                if (reviewedStudyCriteria.isSatisfied()) {
+                    anyInclusionSatisfied = true;
+                }
             }
-            mListener.onStudyInteraction(mStudy);
-
+            if (anyInclusionSatisfied) {
+                if (mStage.equals(StageType.INITIAL_SELECTION)) {
+                    mReviewedStudy.setIncludedInitialSelection(IncludeType.INCLUDED);
+                } else {
+                    mReviewedStudy.setIncludedFinalSelection(IncludeType.INCLUDED);
+                }
+                mListener.onStudyInteraction(mStudy);
+            } else {
+                Toast.makeText(getContext(), "No inclusion criteria satisfied, can't include study!", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
     private View.OnClickListener exclusionClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(mStage.equals(StageType.INITIAL_SELECTION)){
-                mReviewedStudy.setIncludedInitialSelection(IncludeType.EXCLUDED);
-            }else{
-                mReviewedStudy.setIncludedFinalSelection(IncludeType.EXCLUDED);
+            boolean anyExclusionSatisfied = false;
+            for (ReviewedStudyCriteria reviewedStudyCriteria : mReviewedExclusionCriteria) {
+                if (reviewedStudyCriteria.isSatisfied()) {
+                    anyExclusionSatisfied = true;
+                }
             }
-            mListener.onStudyInteraction(mStudy);
+            if (anyExclusionSatisfied) {
+                if (mStage.equals(StageType.INITIAL_SELECTION)) {
+                    mReviewedStudy.setIncludedInitialSelection(IncludeType.EXCLUDED);
+                } else {
+                    mReviewedStudy.setIncludedFinalSelection(IncludeType.EXCLUDED);
+                }
+                mListener.onStudyInteraction(mStudy);
+            } else {
+                Toast.makeText(getContext(), "No exclusion criteria satisfied, can't exclude study!", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
     private View.OnClickListener doubtClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(mStage.equals(StageType.INITIAL_SELECTION)){
+            if (mStage.equals(StageType.INITIAL_SELECTION)) {
                 mReviewedStudy.setIncludedInitialSelection(IncludeType.DOUBT);
-            }else{
+            } else {
                 mReviewedStudy.setIncludedFinalSelection(IncludeType.DOUBT);
             }
             mListener.onStudyInteraction(mStudy);
@@ -246,7 +265,7 @@ public class ReadSRFragment extends Fragment {
         public void onClick(View v) {
             EditText et = (EditText) getView().findViewById(R.id.Comment);
             et.setText("");
-            Toast.makeText(getContext(),"Added comment",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Added comment", Toast.LENGTH_SHORT).show();
         }
     };
 }
