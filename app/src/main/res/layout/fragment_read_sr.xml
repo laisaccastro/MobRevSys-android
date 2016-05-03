@@ -18,15 +18,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title"
-            android:textSize="26dp"
-            android:layout_marginBottom="10px"
+            android:textSize="26sp"
+            android:layout_marginBottom="10dp"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/TextTitleSR"
-            android:layout_marginBottom="20px"
+            android:layout_marginBottom="20sp"
             />
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="Abstract"
             android:textSize="26dp"
-            android:layout_marginBottom="10px"
+            android:layout_marginBottom="10sp"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -88,12 +88,12 @@
             android:layout_height="wrap_content"
             android:text="@string/InclusionCriteriaTextStr"
             android:id="@+id/TextInclusionCriteria"
-            android:textSize="24px"
+            android:textSize="24sp"
             />
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="200px"
+            android:layout_height="100dp"
             android:id="@id/listViewInclusion"
             ></ListView>
 
@@ -102,12 +102,12 @@
             android:layout_height="wrap_content"
             android:text="@string/ExclusionCriteriaTextStr"
             android:id="@+id/TextExclusionCriteria"
-            android:textSize="24px"
+            android:textSize="24sp"
             />
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="200px"
+            android:layout_height="100dp"
             android:id="@id/listViewExclusion"
             ></ListView>
 
