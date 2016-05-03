@@ -144,14 +144,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     writer.close();
                     os.close();
                     Log.i(TAG, "Signed in as: ");
-                    InputStream is = conn.getInputStream();
-                    Scanner scanner = new Scanner(is);
                     responseCode = conn.getResponseCode();
-                    if(responseCode == HttpURLConnection.HTTP_OK) {
-                        Util.saveEmail(email,LoginActivity.this);
-                        return scanner.next();
+                    if(responseCode<400) {
+                        InputStream is = conn.getInputStream();
+                        Scanner scanner = new Scanner(is);
+
+                        if (responseCode == HttpURLConnection.HTTP_OK) {
+                            Util.saveEmail(email, LoginActivity.this);
+                            return scanner.next();
+                        }
+                        Log.i(TAG, "Signed in as: " + responseCode);
+                    }else{
+                        InputStream is = conn.getErrorStream();
+                        Scanner scanner = new Scanner(is);
+                        while (scanner.hasNext()){
+                            System.out.println(scanner.next());
+                        }
                     }
-                    Log.i(TAG, "Signed in as: " + responseCode);
                 } catch (IOException e) {
                     Log.e(TAG, "Error sending ID token to backend.", e);
                     return null;
