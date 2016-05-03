@@ -31,22 +31,26 @@
             android:name=".CreateSRActivity"
             android:label="@string/title_activity_create_sr"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".RegisterRActivity"
             android:label="@string/title_activity_register_r"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_read_sr"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ReadSRActivity"
             android:label="@string/title_activity_read_sr"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name="com.nononsenseapps.filepicker.FilePickerActivity"
