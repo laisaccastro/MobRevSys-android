@@ -62,8 +62,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         btt1=(Button)findViewById(R.id.BttLoginReadSR);
         btt1.setOnClickListener(this);
-
-
+        String email = Util.getEmail(getApplicationContext());
+        if(email!=null){
+            edtxt1=(EditText) findViewById(R.id.EmailLogin);
+            edtxt1.setText(email);
+        }
 
 
     }
@@ -108,6 +111,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         String password = edtxt2.getText().toString();
         LoginTask loginTask = new LoginTask();
         loginTask.execute(email,password);
+        Toast.makeText(LoginActivity.this,"Logging in...", Toast.LENGTH_LONG).show();
 
 
     }
@@ -182,6 +186,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     JwtToken.storeJWT(jwt, LoginActivity.this);
                     Intent i = new Intent(LoginActivity.this,ListSRActivity.class);
                     startActivity(i);
+                    finish();
                     break;
                 case HttpsURLConnection.HTTP_UNAUTHORIZED:
                     Toast.makeText(LoginActivity.this,"The given password does not match. Please try again.",Toast.LENGTH_SHORT).show();

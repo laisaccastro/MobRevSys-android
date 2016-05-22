@@ -1,5 +1,7 @@
 package com.example.laisa.entidades;
 
+import android.util.Log;
+
 import com.example.laisa.Type.PaperDivisionType;
 import com.example.laisa.Type.RoleType;
 import com.example.laisa.Type.StageType;
@@ -108,22 +110,21 @@ public class SystematicReview implements Serializable{
 
     @Override
     public String toString() {
-        String useremail = MyApplication.getCurrentUserEmail();
-        String role = (useremail.equals(owner.getEmail())) ? "Owner" : "Participant";
-        String participantRole = "";
-        if(role.equals("Participant")){
-            for(ReviewerRole rr: participatingReviewers){
-                if(rr.getReviewer().getEmail().equals(useremail)){
-                    participantRole = "\n";
-                    for(RoleType roletype: rr.getRoles()){
-                        participantRole = participantRole + roletype.name()+"\t";
-                    }
-                }
-            }
-        }
+//        String useremail = MyApplication.sharedPreferences.getString("email",null);
+//        String role = (useremail.equals(owner.getEmail())) ? "Owner" : "Participant";
+//        String participantRole = "";
+//        if(role.equals("Participant")){
+//            for(ReviewerRole rr: participatingReviewers){
+//                if(rr.getReviewer().getEmail().equals(useremail)){
+//                    participantRole = "\n";
+//                    for(RoleType roletype: rr.getRoles()){
+//                        participantRole = participantRole + roletype.name()+"\t";
+//                    }
+//                }
+//            }
+//        }
         return  "Title: " + title +
-                "\n"+role+
-                participantRole+
+                "\n"+"Owner:" + owner.getEmail() +
                 "\n"+"Current Stage: "+stage;
     }
 

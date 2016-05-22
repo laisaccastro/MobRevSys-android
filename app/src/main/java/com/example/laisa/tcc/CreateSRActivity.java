@@ -71,7 +71,8 @@ public class CreateSRActivity extends AppCompatActivity {
     List<ReviewerRole> reviewerRoles;
     ListView inclusionList, exclusionList;
     ArrayAdapter inclusionAdapter, exclusionAdapter;
-    final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW", "VTM_REVIEW"};
+//    final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW", "VTM_REVIEW"};
+final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW"};
     final boolean[] checkedRoles = new boolean[]{false, false, false};
     List<RoleType> selectedRoles;
     private static final String TAG = "CreateActivity";
@@ -249,21 +250,23 @@ public class CreateSRActivity extends AppCompatActivity {
                         if (selectedRoles.contains(RoleType.SELECTION)) {
                             AlertDialog.Builder builderSelection = new AlertDialog.Builder(CreateSRActivity.this);
                             builderSelection.setTitle("Selection Method")
-                                    .setMessage("Select the selection method to be used")
-                                    .setPositiveButton("Divide studies", new DialogInterface.OnClickListener() {
+                                    .setMessage("Select the selection activity to be used")
+                                    .setPositiveButton("Divide equally between the reviewers", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             divisionType = PaperDivisionType.SPLIT;
                                             reviewerRole.setRoles(selectedRoles);
                                             reviewerRoles.add(reviewerRole);
+                                            Toast.makeText(CreateSRActivity.this,"Invitation sent",Toast.LENGTH_SHORT).show();
                                         }
                                     })
-                                    .setNegativeButton("All studies", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton("Everyone gets all studies", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             divisionType = PaperDivisionType.ALL;
                                             reviewerRole.setRoles(selectedRoles);
                                             reviewerRoles.add(reviewerRole);
+                                            Toast.makeText(CreateSRActivity.this,"Invitation sent",Toast.LENGTH_SHORT).show();
                                         }
                                     }).create();
                             builderSelection.show();
@@ -479,6 +482,7 @@ public class CreateSRActivity extends AppCompatActivity {
         bibUri = uri;
         readyToCreate = true;
         invalidateOptionsMenu();
+        Toast.makeText(CreateSRActivity.this,".bib successfully selected",Toast.LENGTH_SHORT).show();
     }
 
     public byte[] getBytes(Uri uri) throws IOException {

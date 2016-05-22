@@ -1,35 +1,42 @@
 {
   "project_info": {
-    "project_id": "tccmobrevsys",
-    "project_number": "37163664732",
-    "name": "TCCMobRevSys"
+    "project_number": "609546176749",
+    "project_id": "mobile-revis"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:37163664732:android:7fdca0c39758bcd1",
-        "client_id": "android:com.example.laisa.tcc.auth",
-        "client_type": 1,
+        "mobilesdk_app_id": "1:609546176749:android:b9320998590dd8ef",
         "android_client_info": {
-          "package_name": "com.example.laisa.tcc.auth"
+          "package_name": "com.example.laisa.tcc"
         }
       },
-      "oauth_client": [],
-      "api_key": [],
+      "oauth_client": [
+        {
+          "client_id": "609546176749-818ifepg9k8m3oj68qdlg8gtqdrbgpmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.laisa.tcc",
+            "certificate_hash": "35A3BCEB9C242503F9BDA6BA23765AB182A145BD"
+          }
+        },
+        {
+          "client_id": "609546176749-rtmphcm7tvd7t4t78o0ot342f7d6pm9f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFTJxUu_JXLR6ftI39XxY6XcbwccrMDpA"
+        }
+      ],
       "services": {
         "analytics_service": {
           "status": 1
         },
-        "cloud_messaging_service": {
-          "status": 1,
-          "apns_config": []
-        },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
-        },
-        "google_signin_service": {
-          "status": 1
         },
         "ads_service": {
           "status": 1
@@ -37,6 +44,5 @@
       }
     }
   ],
-  "client_info": [],
-  "ARTIFACT_VERSION": "1"
+  "configuration_version": "1"
 }

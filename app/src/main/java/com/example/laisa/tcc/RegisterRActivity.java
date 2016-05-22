@@ -193,7 +193,7 @@ public class RegisterRActivity extends AppCompatActivity {
                     Intent i = new Intent(RegisterRActivity.this, ListSRActivity.class);
                     Log.d(TAG,jwt);
                     startActivity(i);
-
+                    finish();
                     return;
                 case HttpsURLConnection.HTTP_NOT_ACCEPTABLE:
                     Toast.makeText(RegisterRActivity.this, "an user with the given email already exists.", Toast.LENGTH_SHORT).show();

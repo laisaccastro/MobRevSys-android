@@ -4,75 +4,81 @@
     android:layout_height="match_parent"
     tools:context="com.example.laisa.tcc.ReadSRFragment">
 
-    <LinearLayout
-        android:id="@+id/Layout_central"
+    <ScrollView
+        android:id="@+id/ScrollView03"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
-        android:layout_weight="7"
-        android:background="#ffffff"
-        android:orientation="vertical" >
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title"
-            android:textSize="26sp"
-            android:layout_marginBottom="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/TextTitleSR"
-            android:layout_marginBottom="20sp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Abstract"
-            android:textSize="26dp"
-            android:layout_marginBottom="10sp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/TextAbstractSR"
-            />
+        android:layout_weight="7">
 
         <LinearLayout
-            android:id="@+id/Layout_baixo"
+            android:id="@+id/Layout_central"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="bottom"
-            android:paddingTop="20dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
             android:background="#ffffff"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/Comment"
-                android:hint="@string/HintCommentStr" />
 
-            <Button
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/CommentBttStr"
-                android:id="@+id/BttComment"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
+                android:layout_marginBottom="10dp"
+                android:text="Title"
+                android:textSize="26sp" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/TextTitleSR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20sp"
+                android:text="New Text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:text="Abstract"
+                android:textSize="26dp" />
+
+            <TextView
+                android:id="@+id/TextAbstractSR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text" />
+
+            <LinearLayout
+                android:id="@+id/Layout_baixo"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
+                <EditText
+                    android:id="@+id/Comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/HintCommentStr" />
+
+                <Button
+                    android:id="@+id/BttComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/CommentBttStr" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
     <View
         android:layout_width="6dp"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
-        ></View>
+        android:background="@color/colorPrimaryDark"></View>
+
     <LinearLayout
         android:id="@+id/Layout_direito"
         android:layout_width="0dp"
@@ -80,56 +86,52 @@
         android:layout_margin="0dp"
         android:layout_weight="3"
         android:background="#ffffff"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
 
         <TextView
+            android:id="@+id/TextInclusionCriteria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/InclusionCriteriaTextStr"
-            android:id="@+id/TextInclusionCriteria"
-            android:textSize="24sp"
-            />
+            android:textSize="24sp" />
 
         <ListView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
             android:id="@id/listViewInclusion"
-            ></ListView>
+            android:layout_width="match_parent"
+            android:layout_height="100dp"></ListView>
 
         <TextView
+            android:id="@+id/TextExclusionCriteria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ExclusionCriteriaTextStr"
-            android:id="@+id/TextExclusionCriteria"
-            android:textSize="24sp"
-            />
+            android:textSize="24sp" />
 
         <ListView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
             android:id="@id/listViewExclusion"
-            ></ListView>
+            android:layout_width="match_parent"
+            android:layout_height="100dp"></ListView>
 
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/InclusionBttStr"
             android:id="@+id/BttInclusion"
-            android:layout_gravity="center_horizontal"/>
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/InclusionBttStr" />
+
+        <Button
             android:id="@+id/BttExclusion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/ExclusionBttStr" />
 
         <Button
+            android:id="@+id/BttUndecided"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/BttUndecided"
             android:layout_gravity="center_horizontal"
             android:text="@string/UndecidedBttStr" />
     </LinearLayout>

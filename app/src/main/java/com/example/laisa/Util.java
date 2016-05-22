@@ -10,7 +10,7 @@ public class Util {
 
 
     public static void saveEmail(String email, Activity act){
-        SharedPreferences preferences = act.getSharedPreferences("mobrevsys", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = MyApplication.sharedPreferences;
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("email",email);
         MyApplication.setCurrentUserEmail(email);
@@ -18,7 +18,7 @@ public class Util {
     }
 
     public static String getEmail(Context ctx){
-        SharedPreferences preferences = ctx.getSharedPreferences("mobrevsys", Activity.MODE_PRIVATE);
+        SharedPreferences preferences = MyApplication.sharedPreferences;
         MyApplication.setCurrentUserEmail(preferences.getString("email",null));
         return preferences.getString("email",null);
     }

@@ -173,6 +173,8 @@ public class ReadSRActivity extends AppCompatActivity implements ReadSRFragment.
                 adapter.notifyDataSetChanged();
             }
         }
+        PartialSaveSRTask partialSaveSRTask = new PartialSaveSRTask();
+        partialSaveSRTask.execute(sr);
     }
 
     @Override
@@ -260,6 +262,53 @@ public class ReadSRActivity extends AppCompatActivity implements ReadSRFragment.
         @Override
         protected void onPostExecute(Void aVoid) {
             finish();
+        }
+    }
+
+    private class PartialSaveSRTask extends AsyncTask<SystematicReview, Void, Void> {
+        @Override
+        protected Void doInBackground(SystematicReview... params) {
+            SystematicReview srev = params[0];
+            try {
+
+                URL url = new URL(BuildConfig.BACKEND_HOST + "/api/systematicreview");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestProperty("Content-Type",
+                        "application/json");
+                SharedPreferences pref = getSharedPreferences("mobrevsys", MODE_PRIVATE);
+
+                conn.setRequestProperty("Authorization", pref.getString("jwt", ""));
+                conn.setRequestMethod("POST");
+
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                try {
+                    OutputStream os = conn.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+                    int responseCode;
+                    Gson gson = new Gson();
+                    String srevJson = gson.toJson(srev);
+                    writer.write(srevJson);
+                    writer.flush();
+                    writer.close();
+                    os.close();
+                    responseCode = conn.getResponseCode();
+                    Log.i("saving", "Response code: " + responseCode);
+                } catch (IOException e) {
+                    Log.e("saving", "Error sending request to backend.", e);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
