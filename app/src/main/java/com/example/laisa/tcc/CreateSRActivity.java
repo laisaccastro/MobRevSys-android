@@ -143,6 +143,10 @@ final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW"};
         public void onClick(View v) {
             edtxt2 = (EditText) findViewById(R.id.ObjectiveSR);
             String objective = edtxt2.getText().toString();
+            if(objective.equals("")){
+                Toast.makeText(CreateSRActivity.this, "Objective can't be blank", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (objectives.contains(objective)) {
                 Toast.makeText(CreateSRActivity.this, "Objective has already been added", Toast.LENGTH_SHORT).show();
 
@@ -159,6 +163,10 @@ final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW"};
         @Override
         public void onClick(View v) {
             String criteria = edtxt4.getText().toString();
+            if(criteria.equals("")){
+                Toast.makeText(CreateSRActivity.this, "Criteria can't be blank", Toast.LENGTH_SHORT).show();
+                return;
+            }
             edtxt4.setText("");
             if (exclusionCriteria.contains(criteria)) {
                 Toast.makeText(CreateSRActivity.this, "Criteria has already been created", Toast.LENGTH_SHORT).show();
@@ -176,6 +184,10 @@ final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW"};
         @Override
         public void onClick(View v) {
             String criteria = edtxt4.getText().toString();
+            if(criteria.equals("")){
+                Toast.makeText(CreateSRActivity.this, "Criteria can't be blank", Toast.LENGTH_SHORT).show();
+                return;
+            }
             edtxt4.setText("");
             if (inclusionCriteria.contains(criteria)) {
                 Toast.makeText(CreateSRActivity.this, "Criteria has already been created", Toast.LENGTH_SHORT).show();
@@ -194,6 +206,10 @@ final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW"};
         @Override
         public void onClick(View v) {
             final String reviewerEmail = edtxt5.getText().toString();
+            if(reviewerEmail.equals("")){
+                Toast.makeText(CreateSRActivity.this, "Reviewer email can't be blank", Toast.LENGTH_SHORT).show();
+                return;
+            }
             edtxt5.setText("");
             boolean exists = false;
 
@@ -291,6 +307,10 @@ final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW"};
         public void onClick(View v) {
             edtxt3 = (EditText) findViewById(R.id.QuestionsSR);
             String question = edtxt3.getText().toString();
+            if(question.equals("")){
+                Toast.makeText(CreateSRActivity.this, "Question can't be blank", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (questions.contains(question)) {
                 Toast.makeText(CreateSRActivity.this, "Research question has already been added", Toast.LENGTH_SHORT).show();
 
@@ -339,6 +359,10 @@ final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW"};
     public void createRS() {
         edtxt1 = (EditText) findViewById(R.id.TitleSR);
         String title = edtxt1.getText().toString();
+        if(title.equals("")){
+            Toast.makeText(CreateSRActivity.this, "Title can't be blank", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         List<Criteria> criterias = new ArrayList<>();
         for(String s: inclusionCriteria){

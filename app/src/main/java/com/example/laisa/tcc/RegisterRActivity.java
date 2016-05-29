@@ -108,6 +108,12 @@ public class RegisterRActivity extends AppCompatActivity {
             map.put("cpassword",cpassword);
             map.put("uniaffiliation",uniaffiliation);
             map.put("country",country);
+            for(String s: map.values()){
+                if(s.equals("")){
+                    Toast.makeText(getApplicationContext(),"Please fill all fields",Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            }
             LoginTask task = new LoginTask();
             task.execute(map);
             return true;
