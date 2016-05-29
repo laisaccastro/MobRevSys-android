@@ -3,6 +3,7 @@ package com.example.laisa.tcc;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -50,7 +51,7 @@ public class ReadSRActivity extends AppCompatActivity implements ReadSRFragment.
     ArrayAdapter adapter;
     SystematicReview sr;
     private int selectedStudyindex = 0;
-    private MenuItem saveButton;
+    private MenuItem saveButton, readStudyButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +183,7 @@ public class ReadSRActivity extends AppCompatActivity implements ReadSRFragment.
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_read_sr, menu);
         saveButton = menu.findItem(R.id.action_save_sr);
+        readStudyButton = menu.findItem(R.id.action_read_study);
 
         return true;
     }
@@ -203,6 +205,18 @@ public class ReadSRActivity extends AppCompatActivity implements ReadSRFragment.
             SaveSRTask saveSRTask = new SaveSRTask();
             saveSRTask.execute(sr);
             return true;
+        }
+        if (id == R.id.action_read_study) {
+            Intent intent = getPackageManager().getLaunchIntentForPackage("com.adobe.reader");
+            if (intent != null) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } else {
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setData(Uri.parse("market://details?id=" + "com.adobe.reader"));
+                startActivity(intent);
+            }
         }
 
         return super.onOptionsItemSelected(item);
