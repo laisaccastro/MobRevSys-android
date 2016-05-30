@@ -1,5 +1,6 @@
 package com.example.laisa.tcc;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.example.laisa.JWTUtil.JwtToken;
 import com.example.laisa.Type.IncludeType;
 import com.example.laisa.Type.StageType;
+import com.example.laisa.Util;
 import com.example.laisa.entidades.BibFile;
 import com.example.laisa.entidades.ReviewedStudy;
 import com.example.laisa.entidades.Study;
@@ -107,7 +109,7 @@ public class ReadSRActivity extends AppCompatActivity implements ReadSRFragment.
                 }
                 if(reviewedStudies!=null){
                     for(ReviewedStudy rs: reviewedStudies){
-                        if(rs.getReviewer().getEmail().equals(MyApplication.getCurrentUserEmail())){
+                        if(rs.getReviewer().getEmail().equals(Util.getEmail(getApplicationContext()))){
                             if(sr.getStage().equals(StageType.INITIAL_SELECTION)){
                                 if(rs.getIncludedInitialSelection()!=null) {
                                     switch (rs.getIncludedInitialSelection()) {
