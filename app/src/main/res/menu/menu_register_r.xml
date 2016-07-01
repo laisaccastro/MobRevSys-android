@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.laisa.tcc.RegisterRActivity">
+    tools:context="com.mobilerevis.laisa.tcc.RegisterRActivity">
 
     <item android:id="@+id/action_register"
         android:orderInCategory="100"

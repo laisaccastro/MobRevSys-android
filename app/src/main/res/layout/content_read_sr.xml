@@ -9,7 +9,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_read_sr"
-    tools:context="com.example.laisa.tcc.ReadSRActivity">
+    tools:context="com.mobilerevis.laisa.tcc.ReadSRActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"

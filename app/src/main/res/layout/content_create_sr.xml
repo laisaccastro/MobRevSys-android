@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.laisa.tcc.CreateSRActivity"
+    tools:context="com.mobilerevis.laisa.tcc.CreateSRActivity"
     tools:showIn="@layout/activity_create_sr"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

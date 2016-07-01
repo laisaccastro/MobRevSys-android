@@ -8,7 +8,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:609546176749:android:b9320998590dd8ef",
         "android_client_info": {
-          "package_name": "com.example.laisa.tcc"
+          "package_name": "com.mobilerevis.laisa.tcc"
         }
       },
       "oauth_client": [
@@ -16,7 +16,7 @@
           "client_id": "609546176749-818ifepg9k8m3oj68qdlg8gtqdrbgpmv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.laisa.tcc",
+            "package_name": "com.mobilerevis.laisa.tcc",
             "certificate_hash": "35A3BCEB9C242503F9BDA6BA23765AB182A145BD"
           }
         },
