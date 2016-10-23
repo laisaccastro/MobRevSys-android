@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/content_update_sr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.mobilerevis.laisa.tcc.UpdateSRActivity"
+        tools:showIn="@layout/activity_update_sr">
+
+        <EditText
+            android:id="@+id/TitleSR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:hint="@string/TitleCreateHintStr"
+            android:inputType="text"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/ObjectiveSR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/TitleSR"
+            android:layout_toLeftOf="@+id/BttObjective"
+            android:layout_toStartOf="@+id/BttObjective"
+            android:hint="@string/ObjectiveCreateHintStr"
+            android:inputType="text"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/BttObjective"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/ObjectiveSR"
+            android:layout_alignEnd="@+id/CriteriaSR"
+            android:layout_alignRight="@+id/CriteriaSR"
+            android:layout_below="@+id/TitleSR"
+            android:text="@string/QuestionBttStr"
+            android:textSize="10dp" />
+
+        <ListView
+            android:id="@+id/ObjectiveList"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/ObjectiveSR"
+            android:layout_marginLeft="31dp"
+            android:focusableInTouchMode="true" />
+
+
+        <EditText
+            android:id="@+id/QuestionsSR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/ObjectiveList"
+            android:layout_toLeftOf="@+id/BttQuestion"
+            android:layout_toStartOf="@+id/BttQuestion"
+            android:hint="@string/QuestionsCreateHintStr"
+            android:inputType="text"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/BttQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/QuestionsSR"
+            android:layout_alignEnd="@+id/CriteriaSR"
+            android:layout_alignRight="@+id/CriteriaSR"
+            android:layout_below="@+id/ObjectiveList"
+            android:text="@string/QuestionBttStr"
+            android:textSize="10dp" />
+
+        <ListView
+            android:id="@+id/QuestionList"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/QuestionsSR"
+            android:layout_marginLeft="31dp"
+            android:focusableInTouchMode="true" />
+
+
+        <EditText
+            android:id="@+id/CriteriaSR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/TitleSR"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/TitleSR"
+            android:layout_below="@+id/QuestionList"
+            android:hint="@string/CriteriaHintStr"
+            android:inputType="text"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/BttInclusionCriteria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/BttExclusionCriteria"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/CriteriaSR"
+            android:layout_marginLeft="64dp"
+            android:layout_marginStart="64dp"
+            android:text="@string/InclusionCriteriaBttStr"
+            android:textSize="10dp" />
+
+        <Button
+            android:id="@+id/BttExclusionCriteria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/CriteriaSR"
+            android:layout_toLeftOf="@+id/BttQuestion"
+            android:layout_toStartOf="@+id/BttQuestion"
+            android:text="@string/ExclusionCriteriaBttStr"
+            android:textSize="10dp" />
+
+
+        <RelativeLayout
+            android:id="@+id/relativeListLayout"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_below="@+id/BttInclusionCriteria"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/dummy"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true" />
+
+            <ListView
+                android:id="@+id/listViewInclusion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignRight="@id/dummy"
+                android:focusableInTouchMode="true" />
+
+            <ListView
+                android:id="@+id/listViewExclusion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/dummy"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>

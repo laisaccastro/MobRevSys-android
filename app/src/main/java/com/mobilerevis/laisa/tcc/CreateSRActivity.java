@@ -257,7 +257,7 @@ final CharSequence[] roles = new CharSequence[]{"SELECTION", "REVIEW"};
                         if (selectedRoles.contains(RoleType.SELECTION)) {
                             AlertDialog.Builder builderSelection = new AlertDialog.Builder(CreateSRActivity.this);
                             builderSelection.setTitle("Selection Method")
-                                    .setMessage("Select the selection activity to be used")
+                                    .setMessage("Click on the selection activity to be performed")
                                     .setPositiveButton("Divide equally between the reviewers", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

@@ -11,18 +11,21 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mobilerevis.laisa.JWTUtil.JwtToken;
 import com.mobilerevis.laisa.Type.StageType;
 import com.mobilerevis.laisa.Util;
 import com.mobilerevis.laisa.entidades.SystematicReview;
 import com.google.gson.Gson;
+import com.mobilerevis.laisa.services.MobRevSysBackendService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,6 +38,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ListSRActivity extends AppCompatActivity {
 
@@ -66,6 +75,7 @@ public class ListSRActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,srlist);
         listSR.setAdapter(adapter);
         listSR.setOnItemClickListener(onItemClickListener);
+        registerForContextMenu(listSR);
         adapter.notifyDataSetChanged();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -94,6 +104,7 @@ public class ListSRActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,srlist);
         listSR.setAdapter(adapter);
         listSR.setOnItemClickListener(onItemClickListener);
+        registerForContextMenu(listSR);
         adapter.notifyDataSetChanged();
         Util.getEmail(getApplicationContext());
         ListSRTask listSRTask = new ListSRTask();
@@ -198,6 +209,69 @@ public class ListSRActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId()==R.id.listViewListSR) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+            menu.setHeaderTitle(srlist.get(info.position).getTitle());
+            String[] menuItems = getResources().getStringArray(R.array.list_sr_context_menu);
+            for (int i = 0; i<menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        int menuItemIndex = item.getItemId();
+        String[] menuItems = getResources().getStringArray(R.array.list_sr_context_menu);
+        String menuItemName = menuItems[menuItemIndex];
+        switch (menuItemName) {
+            case "Update":
+                Intent i = new Intent(ListSRActivity.this, UpdateSRActivity.class);
+                SystematicReview srToUpdate = (SystematicReview) listSR.getItemAtPosition(info.position);
+                i.putExtra("systematicReview", srToUpdate);
+                startActivity(i);
+                break;
+            case "Delete":
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(BuildConfig.BACKEND_HOST)
+                        .build();
+                MobRevSysBackendService service = retrofit.create(MobRevSysBackendService.class);
+                final SystematicReview srToDelete = (SystematicReview) listSR.getItemAtPosition(info.position);
+                SharedPreferences pref = getSharedPreferences("mobrevsys", MODE_PRIVATE);
+                Call<ResponseBody> response = service.deleteSystematicReview(srToDelete.getId(), pref.getString("jwt", ""));
+                response.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        switch (response.code()){
+                            case HttpURLConnection.HTTP_OK:
+                                srlist.remove(srToDelete);
+                                adapter.notifyDataSetChanged();
+                                Toast.makeText(ListSRActivity.this, "Deleted systematic review", Toast.LENGTH_SHORT).show();
+                                break;
+                            case HttpURLConnection.HTTP_NOT_FOUND:
+                                Toast.makeText(ListSRActivity.this, "Deletion failed, review not found", Toast.LENGTH_SHORT).show();
+                                break;
+                            case HttpURLConnection.HTTP_INTERNAL_ERROR:
+                                Toast.makeText(ListSRActivity.this, "Deletion failed, internal server error", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+
+                });
+                break;
+        }
+        return true;
     }
 
     private void logout() {

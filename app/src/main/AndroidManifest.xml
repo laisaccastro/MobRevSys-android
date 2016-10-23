@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mobilerevis.laisa.tcc" >
+    package="com.mobilerevis.laisa.tcc">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.mobilerevis.laisa.tcc.MyApplication">
+        android:theme="@style/AppTheme">
         <activity
-            android:name="com.mobilerevis.laisa.tcc.InicialActivity"
+            android:name=".InicialActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="fullUser">
+            android:screenOrientation="fullUser"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,35 +24,34 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mobilerevis.laisa.tcc.ListSRActivity"
+            android:name=".ListSRActivity"
             android:label="@string/title_activity_list_sr"
             android:screenOrientation="fullUser"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.mobilerevis.laisa.tcc.CreateSRActivity"
+            android:name=".CreateSRActivity"
             android:label="@string/title_activity_create_sr"
             android:screenOrientation="fullUser"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.mobilerevis.laisa.tcc.RegisterRActivity"
+            android:name=".RegisterRActivity"
             android:label="@string/title_activity_register_r"
             android:screenOrientation="fullUser"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible|adjustResize"/>
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name="com.mobilerevis.laisa.tcc.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_read_sr"
             android:screenOrientation="fullUser"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible|adjustResize"/>
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name="com.mobilerevis.laisa.tcc.ReadSRActivity"
+            android:name=".ReadSRActivity"
             android:label="@string/title_activity_read_sr"
             android:screenOrientation="fullUser"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible|adjustResize">
-        </activity>
+            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity
             android:name="com.nononsenseapps.filepicker.FilePickerActivity"
             android:label="@string/app_name"
@@ -59,9 +59,14 @@
             android:theme="@style/FilePickerTheme">
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".UpdateSRActivity"
+            android:label="@string/title_activity_update_sr"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
