@@ -295,6 +295,7 @@ public class UpdateSRActivity extends AppCompatActivity {
                 switch (response.code()){
                     case HttpURLConnection.HTTP_OK:
                         Toast.makeText(UpdateSRActivity.this, "Updated systematic review", Toast.LENGTH_SHORT).show();
+                        finish();
                         break;
                     case HttpURLConnection.HTTP_INTERNAL_ERROR:
                         Toast.makeText(UpdateSRActivity.this, "Update failed, internal server error", Toast.LENGTH_SHORT).show();
